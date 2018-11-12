@@ -1,13 +1,11 @@
 public class Match {
-    private Player homePlayer;
-    private Player visitorPlayer;
+    private Player homePlayer = new Player();
+    private Player visitorPlayer = new Player();
     private String result;
     private int homeScore;
     private int visitorScore;
 
     public Match(){
-        this.homePlayer = null;
-        this.visitorPlayer = null;
         this.result = "0 - 0";
         this.homeScore = 0;
         this.visitorScore = 0;
@@ -15,7 +13,9 @@ public class Match {
 
     public Match(Player homePlayer,Player visitorPlayer){
         this.homePlayer = homePlayer;
+        homePlayer.setNumberHomeMatch(homePlayer.getNumberHomeMatch()+1);
         this.visitorPlayer = visitorPlayer;
+        visitorPlayer.setNumberAwayMatch(visitorPlayer.getNumberAwayMatch()+1);
         this.result = "0 - 0";
         this.homeScore = 0;
         this.visitorScore = 0;
@@ -40,9 +40,17 @@ public class Match {
 
     //*** MUTATEURS ***
     //Modifie l'équipe à domicile
-    public void setHomePlayer(Player homeTeam) {this.homePlayer = homeTeam;}
+    public void setHomePlayer(Player homeTeam) {
+        if(this.homePlayer.getPlayerNumber() != 0) this.homePlayer.setNumberHomeMatch(this.homePlayer.getNumberHomeMatch()-1);
+        this.homePlayer = homeTeam;
+        this.homePlayer.setNumberHomeMatch(this.homePlayer.getNumberHomeMatch()+1);
+    }
     //Modifie l'équipe à l'extérieure
-    public void setVisitorPlayer(Player visitorTeam) {this.visitorPlayer = visitorTeam;}
+    public void setVisitorPlayer(Player visitorTeam) {
+        if(this.visitorPlayer.getPlayerNumber() != 0) this.visitorPlayer.setNumberAwayMatch(this.visitorPlayer.getNumberAwayMatch()-1);
+        this.visitorPlayer = visitorTeam;
+        this.visitorPlayer.setNumberAwayMatch(this.visitorPlayer.getNumberAwayMatch()+1);
+    }
     //Modifie le résultat
     public void setResult(String result) {this.result = result;}
     //Modifie le score de l'équipe domicile

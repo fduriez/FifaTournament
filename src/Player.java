@@ -7,6 +7,8 @@ public class Player {
     private int goalDifference;
     private int playerNumber;
     private int numberWaiting;
+    private int numberHomeMatch;
+    private int numberAwayMatch;
 
     //Constructeur par défault
     public Player() {
@@ -60,6 +62,10 @@ public class Player {
     public String getTeam() {return team;}
     //Retourne le nombre d'attente
     public int getNumberWaiting() {return numberWaiting;}
+    //Retourne le nombre de match à domicile
+    public int getNumberHomeMatch() {return numberHomeMatch;}
+    //Retourne le nombre de match à l'exterieur
+    public int getNumberAwayMatch() {return numberAwayMatch;}
 
     //*** MUTATEURS ***
     //Modifie le nom
@@ -78,4 +84,8 @@ public class Player {
     public void setTeam(String team) {this.team = team;}
     //Modifie le nombre d'attente
     public void setNumberWaiting(int numberWaiting) {this.numberWaiting = numberWaiting;}
+    //Modifie le nombre de match à domicile
+    public void setNumberHomeMatch(int numberHomeMatch) {this.numberHomeMatch = numberHomeMatch;}
+    //Modifie le nombre de match à l'exterieur
+    public void setNumberAwayMatch(int numberAwayMatch) {this.numberAwayMatch = numberAwayMatch;}
 }
