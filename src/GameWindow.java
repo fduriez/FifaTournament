@@ -69,12 +69,16 @@ public class GameWindow extends JFrame {
         this.setVisible(true);
 
         Lottery();
+        initCalendar();
+
         //Initialisation du tournoi
         //InitParameters();
-        initCalendar();
+        //initCalendarFromAlgo();
 
         //CreateCalendar();
         //InitCalendarTable();
+
+        calendarDisplay();
 
         //Fonction déclanché par le validButton
         ActionListener action = new ActionListener() {
@@ -207,7 +211,7 @@ public class GameWindow extends JFrame {
     }
 
     //Initialisation du Calendrier
-    public void initCalendar(){
+    public void initCalendarFromAlgo(){
         int cursor = 0;
 
         List<Pair> allHomeMatchs = new ArrayList<>();
@@ -425,10 +429,77 @@ public class GameWindow extends JFrame {
         return mandatoryWaiters;
     }
 
+    //Initialisation du calendrier en dur
+    public void initCalendar(){
+        List<Pair> pairs = new ArrayList<>();
+        switch (this.players.size()){
+            case 4:
+                pairs=calendar4Player();
+                break;
+            case 5:
+                pairs=calendar5Player();
+                break;
+            case 6:
+                if(this.nbTV == 2) pairs=calendar6Player2TV();
+                if(this.nbTV == 3) pairs=calendar6Player3TV();
+                break;
+            case 7:
+                if(this.nbTV == 2) pairs=calendar7Player2TV();
+                if(this.nbTV == 3) pairs=calendar7Player3TV();
+                break;
+            case 8:
+                if(this.nbTV == 3) pairs=calendar8Player3TV();
+                if(this.nbTV == 4) pairs=calendar8Player4TV();
+                break;
+        }
+        this.calendar.add(new MatchWeek());
+        List week = new ArrayList<>();
+        for(Pair pair : pairs) {
+            Match match = new Match(getPlayerByNumber((Integer) pair.getKey()), getPlayerByNumber((Integer) pair.getValue()));
+            week.add(match);
+            if(week.size() == this.nbTV){
+                this.calendar.get(this.calendar.size()-1).setWeek(week);
+                this.calendar.get(this.calendar.size()-1).setWaitingPlayer(getWaiters(week));
+                week = new ArrayList<>();
+                this.calendar.add(new MatchWeek());
+            }
+        }
+        if(!week.isEmpty()){
+            this.calendar.get(this.calendar.size()-1).setWeek(week);
+            this.calendar.get(this.calendar.size()-1).setWaitingPlayer(getWaiters(week));
+        }
+        else this.calendar.remove(this.calendar.size()-1);
+    }
 
+    //Calendrier pour 4 players
+    public List<Pair> calendar4Player(){
+        List<Pair> pairs = new ArrayList<Pair>();
 
-    //Rempli le calendrier
-    public void Calendar5Pl2TV(){
+        //Calendrier pour 5 joueurs avec 2 TV
+        //Journée 1
+        pairs.add(new Pair(1,2));
+        pairs.add(new Pair(3,4));
+        //Journée 2
+        pairs.add(new Pair(1,3));
+        pairs.add(new Pair(2,4));
+        //Journée 3
+        pairs.add(new Pair(4,1));
+        pairs.add(new Pair(2,3));
+        //Journée 4
+        pairs.add(new Pair(2,1));
+        pairs.add(new Pair(4,3));
+        //Journée 5
+        pairs.add(new Pair(3,1));
+        pairs.add(new Pair(4,2));
+        //Journée 6
+        pairs.add(new Pair(1,4));
+        pairs.add(new Pair(3,2));
+
+        return pairs;
+    }
+
+    //Calendrier pour 5 players
+    public List<Pair> calendar5Player(){
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 5 joueurs avec 2 TV
@@ -458,29 +529,16 @@ public class GameWindow extends JFrame {
         pairs.add(new Pair(5,2));
         //Journée 9
         pairs.add(new Pair(3,1));
-        pairs.add(new Pair(5,4));
+        pairs.add(new Pair(4,5));
         //Journée 10
         pairs.add(new Pair(2,4));
         pairs.add(new Pair(5,3));
 
-        for(Pair pair : pairs) {
-            for (Player player1 : this.players) {
-                for (Player player2 : this.players) {
-                    if ((player1.getPlayerNumber() == (int) pair.getKey()) && (player2.getPlayerNumber() == (int) pair.getValue())) {
-                        //this.calendar.add(new Match(player1,player2));
-                    }
-                }
-            }
-        }
-
-        //Affiche le calendrier
-        /*for(Match match : calendar){
-            match.Display();
-        }*/
+        return pairs;
     }
 
-    //Rempli le calendrier
-    public void Calendar6Pl2TV(){
+    //Calendrier pour 6 players avec 2 TV
+    public List<Pair> calendar6Player2TV(){
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 6 joueurs avec 2TV
@@ -530,19 +588,60 @@ public class GameWindow extends JFrame {
         pairs.add(new Pair(6,5));
         pairs.add(new Pair(3,1));
 
-        for(Pair pair : pairs) {
-            for (Player player1 : this.players) {
-                for (Player player2 : this.players) {
-                    if ((player1.getPlayerNumber() == (int) pair.getKey()) && (player2.getPlayerNumber() == (int) pair.getValue())) {
-                        //this.calendar.add(new Match(player1,player2));
-                    }
-                }
-            }
-        }
+        return pairs;
     }
 
-    //Rempli le calendrier
-    public void Calendar7Pl2TV(){
+    //Calendrier pour 6 players avec 3 TV
+    public List<Pair> calendar6Player3TV(){
+        List<Pair> pairs = new ArrayList<Pair>();
+
+        //Calendrier pour 6 joueurs avec 2TV
+        //Journée 1
+        pairs.add(new Pair(1,2));
+        pairs.add(new Pair(3,4));
+        pairs.add(new Pair(5,6));
+        //Journée 2
+        pairs.add(new Pair(1,3));
+        pairs.add(new Pair(2,5));
+        pairs.add(new Pair(4,6));
+        //Journée 3
+        pairs.add(new Pair(6,1));
+        pairs.add(new Pair(2,3));
+        pairs.add(new Pair(4,5));
+        //Journée 4
+        pairs.add(new Pair(6,2));
+        pairs.add(new Pair(1,4));
+        pairs.add(new Pair(3,5));
+        //Journée 5
+        pairs.add(new Pair(2,4));
+        pairs.add(new Pair(5,1));
+        pairs.add(new Pair(3,6));
+        //Journée 6
+        pairs.add(new Pair(2,1));
+        pairs.add(new Pair(4,3));
+        pairs.add(new Pair(6,5));
+        //Journée 7
+        pairs.add(new Pair(3,1));
+        pairs.add(new Pair(5,2));
+        pairs.add(new Pair(6,4));
+        //Journée 8
+        pairs.add(new Pair(1,6));
+        pairs.add(new Pair(3,2));
+        pairs.add(new Pair(5,4));
+        //Journée 9
+        pairs.add(new Pair(2,6));
+        pairs.add(new Pair(4,1));
+        pairs.add(new Pair(5,3));
+        //Journée 10
+        pairs.add(new Pair(4,2));
+        pairs.add(new Pair(1,5));
+        pairs.add(new Pair(6,3));
+
+        return pairs;
+    }
+
+    //Calendrier pour 7 players avec 2 TV
+    public List<Pair> calendar7Player2TV(){
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 7 joueurs avec 2 TV
@@ -610,24 +709,76 @@ public class GameWindow extends JFrame {
         pairs.add(new Pair(4,1));
         pairs.add(new Pair(6,5));
 
-        for(Pair pair : pairs) {
-            for (Player player1 : this.players) {
-                for (Player player2 : this.players) {
-                    if ((player1.getPlayerNumber() == (int) pair.getKey()) && (player2.getPlayerNumber() == (int) pair.getValue())) {
-                        //this.calendar.add(new Match(player1,player2));
-                    }
-                }
-            }
-        }
-
-        //Affiche le calendrier
-        /*for(Match match : calendar){
-            match.Display();
-        }*/
+        return pairs;
     }
 
-    //Rempli le calendrier
-    public void Calendar8Pl3TV(){
+    //Calendrier pour 7 players avec 3 TV
+    public List<Pair> calendar7Player3TV(){
+        List<Pair> pairs = new ArrayList<Pair>();
+
+        //Calendrier pour 7 joueurs avec 2 TV
+        //Journée 1
+        pairs.add(new Pair(1,2));
+        pairs.add(new Pair(3,4));
+        pairs.add(new Pair(5,6));
+        //Journée 2
+        pairs.add(new Pair(2,3));
+        pairs.add(new Pair(4,5));
+        pairs.add(new Pair(6,7));
+        //Journée 3
+        pairs.add(new Pair(1,3));
+        pairs.add(new Pair(2,4));
+        pairs.add(new Pair(5,7));
+        //Journée 4
+        pairs.add(new Pair(7,1));
+        pairs.add(new Pair(3,5));
+        pairs.add(new Pair(4,6));
+        //Journée 5
+        pairs.add(new Pair(1,4));
+        pairs.add(new Pair(7,2));
+        pairs.add(new Pair(3,6));
+        //Journée 6
+        pairs.add(new Pair(5,1));
+        pairs.add(new Pair(6,2));
+        pairs.add(new Pair(4,7));
+        //Journée 7
+        pairs.add(new Pair(6,1));
+        pairs.add(new Pair(2,5));
+        pairs.add(new Pair(7,3));
+        //Journée 8
+        pairs.add(new Pair(2,1));
+        pairs.add(new Pair(4,3));
+        pairs.add(new Pair(6,5));
+        //Journée 9
+        pairs.add(new Pair(3,2));
+        pairs.add(new Pair(5,4));
+        pairs.add(new Pair(7,6));
+        //Journée 10
+        pairs.add(new Pair(3,1));
+        pairs.add(new Pair(4,2));
+        pairs.add(new Pair(7,5));
+        //Journée 11
+        pairs.add(new Pair(1,7));
+        pairs.add(new Pair(5,3));
+        pairs.add(new Pair(6,4));
+        //Journée 12
+        pairs.add(new Pair(4,1));
+        pairs.add(new Pair(2,7));
+        pairs.add(new Pair(6,3));
+        //Journée 13
+        pairs.add(new Pair(1,5));
+        pairs.add(new Pair(2,6));
+        pairs.add(new Pair(7,4));
+        //Journée 14
+        pairs.add(new Pair(1,6));
+        pairs.add(new Pair(5,2));
+        pairs.add(new Pair(3,7));
+
+        return pairs;
+    }
+
+    //Calendrier pour 8 players avec 3 TV
+    public List<Pair> calendar8Player3TV(){
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 8 joueurs avec 3 TV
@@ -706,21 +857,113 @@ public class GameWindow extends JFrame {
         //Journée 19
         pairs.add(new Pair(6,4));
         pairs.add(new Pair(7,3));
+        return pairs;
+    }
 
-        for(Pair pair : pairs) {
-            for (Player player1 : this.players) {
-                for (Player player2 : this.players) {
-                    if ((player1.getPlayerNumber() == (int) pair.getKey()) && (player2.getPlayerNumber() == (int) pair.getValue())) {
-                        //this.calendar.add(new Match(player1,player2));
-                    }
-                }
+    //Calendrier pour 8 players avec 4 TV
+    public List<Pair> calendar8Player4TV(){
+        List<Pair> pairs = new ArrayList<Pair>();
+
+        //Calendrier pour 8 joueurs avec 3 TV
+        //Journée 1
+        pairs.add(new Pair(1,2));
+        pairs.add(new Pair(3,4));
+        pairs.add(new Pair(5,6));
+        pairs.add(new Pair(7,8));
+        //Journée 2
+        pairs.add(new Pair(8,1));
+        pairs.add(new Pair(2,3));
+        pairs.add(new Pair(4,5));
+        pairs.add(new Pair(6,7));
+        //Journée 3
+        pairs.add(new Pair(1,3));
+        pairs.add(new Pair(2,4));
+        pairs.add(new Pair(5,7));
+        pairs.add(new Pair(6,8));
+        //Journée 4
+        pairs.add(new Pair(7,1));
+        pairs.add(new Pair(8,2));
+        pairs.add(new Pair(3,5));
+        pairs.add(new Pair(4,6));
+        //Journée 5
+        pairs.add(new Pair(1,4));
+        pairs.add(new Pair(5,8));
+        pairs.add(new Pair(2,6));
+        pairs.add(new Pair(3,7));
+        //Journée 6
+        pairs.add(new Pair(6,1));
+        pairs.add(new Pair(2,5));
+        pairs.add(new Pair(8,3));
+        pairs.add(new Pair(4,7));
+        //Journée 7
+        pairs.add(new Pair(1,5));
+        pairs.add(new Pair(7,2));
+        pairs.add(new Pair(3,6));
+        pairs.add(new Pair(4,8));
+        //Journée 8
+        pairs.add(new Pair(2,1));
+        pairs.add(new Pair(4,3));
+        pairs.add(new Pair(6,5));
+        pairs.add(new Pair(8,7));
+        //Journée 9
+        pairs.add(new Pair(1,8));
+        pairs.add(new Pair(3,2));
+        pairs.add(new Pair(5,4));
+        pairs.add(new Pair(7,6));
+        //Journée 10
+        pairs.add(new Pair(3,1));
+        pairs.add(new Pair(4,2));
+        pairs.add(new Pair(7,5));
+        pairs.add(new Pair(8,6));
+        //Journée 11
+        pairs.add(new Pair(1,7));
+        pairs.add(new Pair(2,8));
+        pairs.add(new Pair(5,3));
+        pairs.add(new Pair(6,4));
+        //Journée 12
+        pairs.add(new Pair(4,1));
+        pairs.add(new Pair(8,5));
+        pairs.add(new Pair(6,2));
+        pairs.add(new Pair(7,3));
+        //Journée 13
+        pairs.add(new Pair(1,6));
+        pairs.add(new Pair(5,2));
+        pairs.add(new Pair(3,8));
+        pairs.add(new Pair(7,4));
+        //Journée 14
+        pairs.add(new Pair(5,1));
+        pairs.add(new Pair(2,7));
+        pairs.add(new Pair(6,3));
+        pairs.add(new Pair(8,4));
+
+        return pairs;
+    }
+
+    //Affiche le Calendrier
+    public void calendarDisplay(){
+        int compteur = 0;
+        System.out.println();
+        System.out.println("******************** Calendrier ********************");
+        System.out.println();
+        for(MatchWeek week : this.calendar){
+            compteur++;
+            System.out.println("*** Journée " + compteur + " ***");
+            for(Match match : week.getWeek()){
+                System.out.println(match.getHomePlayer().getPlayerNumber() + " - " + match.getVisitorPlayer().getPlayerNumber());
             }
+            for(Player player : week.getWaitingPlayer()){
+                System.out.print(player.getPlayerNumber() + " ");
+            }
+            System.out.println();
+            System.out.println();
         }
+        System.out.println("******************** Fin Calendrier ********************");
 
-        //Affiche le calendrier
-        /*for(Match match : calendar){
-            match.Display();
-        }*/
+        for(Player player : this.players){
+            System.out.println("Player : " + player.getPlayerNumber());
+            System.out.println("nombre de matche a domicile : " + player.getNumberHomeMatch());
+            System.out.println("nombre de matche a l'exterieur : " + player.getNumberAwayMatch());
+        }
     }
 }
 

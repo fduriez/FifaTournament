@@ -7,6 +7,19 @@ public class Main {
         //System.out.println("Hello World!");
 
         /*** Test GameWindow ***/
+        List<Player> players4 = new ArrayList<Player>();
+        players4.add(new Player("Binou","Juv"));
+        players4.add(new Player("Landou","Belgique"));
+        players4.add(new Player("Dadou","PSG"));
+        players4.add(new Player("Ronron","Barca"));
+
+        List<Player> players5 = new ArrayList<Player>();
+        players5.add(new Player("Binou","Juv"));
+        players5.add(new Player("Landou","Belgique"));
+        players5.add(new Player("Dadou","PSG"));
+        players5.add(new Player("Ronron","Barca"));
+        players5.add(new Player("Toto","France"));
+
         List<Player> players6 = new ArrayList<Player>();
         players6.add(new Player("Binou","Juv"));
         players6.add(new Player("Landou","Belgique"));
@@ -34,7 +47,7 @@ public class Main {
         players8.add(new Player("Fafa","Real"));
         players8.add(new Player("Jacquou","TsoinTsoin"));
 
-        GameWindow window = new GameWindow(players7,2);
+        GameWindow window = new GameWindow(players8,4);
 
         /*** Test full APP ***/
         //FirstWindow window = new FirstWindow();
