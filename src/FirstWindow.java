@@ -7,8 +7,7 @@ public class FirstWindow extends JFrame implements ActionListener{
     private JComboBox nbParticipantCombo = new JComboBox();
     private JComboBox nbTVCombo = new JComboBox();
     private JButton validButton = new JButton("Valider");
-    private int nbParticipant;
-    private int nbTV;
+
     public FirstWindow(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("NOMBRE DE PARTICIPANTS");
@@ -55,10 +54,15 @@ public class FirstWindow extends JFrame implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent arg0) {
-        this.nbParticipant = Integer.valueOf((String) this.nbParticipantCombo.getSelectedItem());
-        this.nbTV = Integer.valueOf((String) this.nbTVCombo.getSelectedItem());
+        Param.NB_PLAYER = Integer.valueOf((String) this.nbParticipantCombo.getSelectedItem());
+        Param.NB_TV = Integer.valueOf((String) this.nbTVCombo.getSelectedItem());
+        Param.NB_MATCH = 0;
+        for(int i=1; i<Param.NB_PLAYER; i++) {
+            Param.NB_MATCH += i;
+        }
+        Param.NB_MATCH *= 2;
 
         this.dispose();
-        PlayersWindow playerWindow = new PlayersWindow(this.nbParticipant,this.nbTV);
+        PlayersWindow playerWindow = new PlayersWindow();
     }
 }

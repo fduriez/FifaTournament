@@ -12,21 +12,15 @@ public class PlayersWindow extends JFrame implements ActionListener{
     private JButton addButton = new JButton("Ajouter");
     private JButton deleteButton = new JButton("Supprimer");
     private JButton finishButton = new JButton("Valider");
-    private List<Player> players = new ArrayList<Player>();
     private JTable table;
-    private int nbParticipant;
-    private int nbTV;
 
-    public PlayersWindow(int nbParticipant, int nbTV) {
+    public PlayersWindow() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("NOM DES PARTICIPANTS");
         this.setSize(500, 300);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.finishButton.setEnabled(false);
-
-        this.nbParticipant = nbParticipant;
-        this.nbTV = nbTV;
 
         //Création d'une table d'1 colonne vide
         String[] title = {"Name","Team"};
@@ -115,14 +109,15 @@ public class PlayersWindow extends JFrame implements ActionListener{
     //Méthode écoutant le bouton "Valider"
     public void actionPerformed(ActionEvent arg0) {
         System.out.println("*** Participants ***");
-        for(Player player : players) {
+        for(Player player : Param.PLAYERS) {
             System.out.println(player.getName().toString());
         }
-        System.out.println("nombre de Participant : " + nbParticipant);
-        System.out.println("nombre de TV : " + nbTV);
+        System.out.println("nombre de Participant : " + Param.NB_PLAYER);
+        System.out.println("nombre de TV : " + Param.NB_TV);
 
         this.dispose();
-        GameWindow gameWindow = new GameWindow(players,nbTV);
+        GameWindow gameWindow = new GameWindow();
+
     }
 
     //Classe écoutant le bouton "Ajouter"
@@ -132,11 +127,11 @@ public class PlayersWindow extends JFrame implements ActionListener{
             if((!nameTextField.getText().isEmpty()) && (!teamTextField.getText().isEmpty())) {
                 String name = nameTextField.getText();
                 String team = teamTextField.getText();
-                players.add(new Player(name,team));
+                Param.PLAYERS.add(new Player(name,team));
 
                 ((DefaultTableModel) table.getModel()).addRow(new Object[]{name,team});
 
-                if(players.size() == nbParticipant) finishButton.setEnabled(true);
+                if(Param.PLAYERS.size() == Param.NB_PLAYER) finishButton.setEnabled(true);
                 else finishButton.setEnabled(false);
 
                 nameTextField.setText("");
@@ -154,12 +149,12 @@ public class PlayersWindow extends JFrame implements ActionListener{
                 String value = table.getValueAt(table.getSelectedRow(),0).toString();
 
                 int index = 0;
-                for(int i = 0; i < players.size(); i++){
-                    if(players.get(i).getName().equals(value)) index = i;
+                for(int i = 0; i < Param.PLAYERS.size(); i++){
+                    if(Param.PLAYERS.get(i).getName().equals(value)) index = i;
                 }
-                players.remove(index);
+                Param.PLAYERS.remove(index);
 
-                if(players.size() == nbParticipant) finishButton.setEnabled(true);
+                if(Param.PLAYERS.size() == Param.NB_PLAYER) finishButton.setEnabled(true);
                 else finishButton.setEnabled(false);
 
                 ((DefaultTableModel)table.getModel()).removeRow(table.getSelectedRow());

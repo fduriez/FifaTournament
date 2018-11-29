@@ -6,7 +6,7 @@ public class Match {
     private int visitorScore;
 
     public Match(){
-        this.result = "0 - 0";
+        this.result = "";
         this.homeScore = 0;
         this.visitorScore = 0;
     }
@@ -16,12 +16,12 @@ public class Match {
         homePlayer.setNumberHomeMatch(homePlayer.getNumberHomeMatch()+1);
         this.visitorPlayer = visitorPlayer;
         visitorPlayer.setNumberAwayMatch(visitorPlayer.getNumberAwayMatch()+1);
-        this.result = "0 - 0";
+        this.result = "";
         this.homeScore = 0;
         this.visitorScore = 0;
     }
 
-    public void Display(){
+    public void display(){
         System.out.println("*** Infos Match ***");
         System.out.println("*" + this.homePlayer.getName() + " " + this.result + " " + this.visitorPlayer.getName() + "*");
     }

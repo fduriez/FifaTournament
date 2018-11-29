@@ -33,7 +33,7 @@ public class Player {
     }
 
     //Affichage des variables de la classe
-    public void Display() {
+    public void display() {
         System.out.println();
         System.out.println("*** Infos Player ***");
         System.out.println("Nom: " + this.name);

@@ -4,8 +4,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //System.out.println("Hello World!");
-
         /*** Test GameWindow ***/
         List<Player> players4 = new ArrayList<Player>();
         players4.add(new Player("Binou","Juv"));
@@ -47,9 +45,18 @@ public class Main {
         players8.add(new Player("Fafa","Real"));
         players8.add(new Player("Jacquou","TsoinTsoin"));
 
-        GameWindow window = new GameWindow(players8,4);
+        Param.NB_TV = 3;
+        Param.NB_PLAYER = 8;
+        Param.NB_MATCH = 56;
+        Param.PLAYERS = new ArrayList<>(players8);
+
+        GameWindow window = new GameWindow();
 
         /*** Test full APP ***/
         //FirstWindow window = new FirstWindow();
+    }
+
+    private void initParam(){
+
     }
 }
