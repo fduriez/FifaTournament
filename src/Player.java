@@ -73,9 +73,15 @@ public class Player {
     //Modifie les points
     public void setPoints(int points){this.points = points;}
     //Modifie les buts marqués
-    public void setGoalsScored(int goalsScored){this.goalsScored = goalsScored;}
+    public void setGoalsScored(int goalsScored){
+        this.goalsScored = goalsScored;
+        this.goalDifference = this.goalsScored - this.goalsTaken;
+    }
     //Modifie les buts pris
-    public void setGoalsTaken(int goalsTaken){this.goalsTaken = goalsTaken;}
+    public void setGoalsTaken(int goalsTaken){
+        this.goalsTaken = goalsTaken;
+        this.goalDifference = this.goalsScored - this.goalsTaken;
+    }
     //Modifie la différence de buts
     public void setGoalDifference(int goalDifference){this.goalDifference = goalDifference;}
     //Modifie le numéro de joueur

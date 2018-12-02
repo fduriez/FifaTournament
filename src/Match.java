@@ -7,8 +7,8 @@ public class Match {
 
     public Match(){
         this.result = "";
-        this.homeScore = 0;
-        this.visitorScore = 0;
+        this.homeScore = -1;
+        this.visitorScore = -1;
     }
 
     public Match(Player homePlayer,Player visitorPlayer){
@@ -17,8 +17,8 @@ public class Match {
         this.visitorPlayer = visitorPlayer;
         visitorPlayer.setNumberAwayMatch(visitorPlayer.getNumberAwayMatch()+1);
         this.result = "";
-        this.homeScore = 0;
-        this.visitorScore = 0;
+        this.homeScore = -1;
+        this.visitorScore = -1;
     }
 
     public void display(){
@@ -52,7 +52,36 @@ public class Match {
         this.visitorPlayer.setNumberAwayMatch(this.visitorPlayer.getNumberAwayMatch()+1);
     }
     //Modifie le résultat
-    public void setResult(String result) {this.result = result;}
+    public void setResult(String result) {
+        if(this.result != ""){
+
+        }
+        this.result = result;
+        result = result.replaceAll(" ","");
+
+        //Ajoute score domicile & extérieur
+        String[] a = result.split("-");
+        this.homeScore = Integer.parseInt(a[0]);
+        this.visitorScore = Integer.parseInt(a[1]);
+
+        //Ajoute les buts aux joueurs
+        this.homePlayer.setGoalsScored(this.homePlayer.getGoalsScored() + this.homeScore);
+        this.homePlayer.setGoalsTaken(this.homePlayer.getGoalsTaken() + this.visitorScore);
+        this.visitorPlayer.setGoalsScored(this.visitorPlayer.getGoalsScored() + this.visitorScore);
+        this.visitorPlayer.setGoalsTaken(this.visitorPlayer.getGoalsTaken() + this.homeScore);
+
+        //Ajoute les points aux joueurs
+        if(this.homeScore > this.visitorScore){
+            this.homePlayer.setPoints(this.homePlayer.getPoints() + 3);
+        }
+        else if (this.homeScore < this.visitorScore){
+            this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() + 3);
+        }
+        else{
+            this.homePlayer.setPoints(this.homePlayer.getPoints() + 1);
+            this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() + 1);
+        }
+    }
     //Modifie le score de l'équipe domicile
     public void setHomeScore(int homeScore) {this.homeScore = homeScore;}
     //Modifie le score de l'équipe extérieur

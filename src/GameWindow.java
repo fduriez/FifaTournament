@@ -18,6 +18,7 @@ public class GameWindow extends JFrame {
     private JButton validButton = new JButton("Valider");
 
     private Calendar calendar = new Calendar();
+    private Ranking ranking = new Ranking();
 
     public GameWindow() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,7 +39,7 @@ public class GameWindow extends JFrame {
         this.rankingTable.setRowHeight(18);
         JScrollPane scRanking = new JScrollPane(this.rankingTable);
 
-        this.calendar.display();
+        this.ranking.display();
 
         data = initDataCalendarTable();
         String[] titleCalendar = {"Match","Score"};
@@ -308,6 +309,8 @@ public class GameWindow extends JFrame {
 
         this.calendarTable.setValueAt(score,row,1);
         this.calendar.getCurrentWeek().getCurrentMatch().setResult(score);
+        this.ranking.updateRanking();
+        this.ranking.display();
     }
 }
 
