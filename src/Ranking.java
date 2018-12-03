@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ranking {
-    List<Pair> ranking = new ArrayList<>();
+    private List<Pair> ranking = new ArrayList<>();
 
     public Ranking(){
         int compteur = 1;
@@ -44,4 +44,12 @@ public class Ranking {
 
         System.out.println("********** Fin Ranking **********");
     }
+
+    //*** ACCESSEURS ***
+    //Retourne le classement des joueurs
+    public List<Pair> getRanking(){return this.ranking;}
+
+    //*** MUTATEURS ***
+    //Modifie le classement des joueurs
+    public void setRanking(List<Pair> ranking){this.ranking=ranking;}
 }

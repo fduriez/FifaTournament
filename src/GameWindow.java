@@ -1,9 +1,8 @@
 import javafx.util.Pair;
+
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
@@ -311,6 +310,21 @@ public class GameWindow extends JFrame {
         this.calendar.getCurrentWeek().getCurrentMatch().setResult(score);
         this.ranking.updateRanking();
         this.ranking.display();
+        updateRankingTable();
+    }
+
+    public void updateRankingTable(){
+        //this.rankingTable.removeAll();
+
+        DefaultTableModel model = (DefaultTableModel) this.rankingTable.getModel();
+        int rowCount = model.getRowCount();
+        for(int row=rowCount-1; row>=0; row--){
+            model.removeRow(row);
+        }
+        for(Pair pair : this.ranking.getRanking()) {
+            Player player = (Player)pair.getValue();
+            model.addRow(new Object[]{player.getName(),player.getTeam(),player.getPoints(),player.getGoalDifference()});
+        }
     }
 }
 
