@@ -1,11 +1,9 @@
 import javafx.util.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Calendar {
     private List<Week> weeks = new ArrayList<>();
-    private int currentWeek = 1;
 
     public Calendar(){
         this.Lottery();
@@ -63,6 +61,10 @@ public class Calendar {
                 if (Param.NB_TV == 2) pairs = this.calendar8Player2TV();
                 if (Param.NB_TV == 3) pairs = this.calendar8Player3TV();
                 if (Param.NB_TV == 4) pairs = this.calendar8Player4TV();
+                break;
+            case 9:
+                if (Param.NB_TV == 3) pairs = this.calendar9Player3TV();
+                if (Param.NB_TV == 4) pairs = this.calendar9Player4TV();
                 break;
         }
         int weekNumber = 0;
@@ -643,6 +645,209 @@ public class Calendar {
         return pairs;
     }
 
+    //Calendrier pour 9 players avec 3 TV
+    private List<Pair> calendar9Player3TV() {
+        List<Pair> pairs = new ArrayList<Pair>();
+
+        //Calendrier pour 9 joueurs avec 3 TV
+        //Journée 1
+        pairs.add(new Pair(1, 2));
+        pairs.add(new Pair(3, 4));
+        pairs.add(new Pair(5, 6));
+        //Journée 2
+        pairs.add(new Pair(7, 1));
+        pairs.add(new Pair(8, 2));
+        pairs.add(new Pair(9, 3));
+        //Journée 3
+        pairs.add(new Pair(4, 7));
+        pairs.add(new Pair(5, 8));
+        pairs.add(new Pair(6, 9));
+        //Journée 4
+        pairs.add(new Pair(1, 3));
+        pairs.add(new Pair(2, 4));
+        pairs.add(new Pair(8, 9));
+        //Journée 5
+        pairs.add(new Pair(1, 4));
+        pairs.add(new Pair(2, 5));
+        pairs.add(new Pair(6, 7));
+        //Journée 6
+        pairs.add(new Pair(3, 6));
+        pairs.add(new Pair(5, 9));
+        pairs.add(new Pair(7, 8));
+        //Journée 7
+        pairs.add(new Pair(1, 5));
+        pairs.add(new Pair(2, 6));
+        pairs.add(new Pair(9, 4));
+        //Journée 8
+        pairs.add(new Pair(8, 3));
+        pairs.add(new Pair(7, 2));
+        pairs.add(new Pair(4, 5));
+        //Journée 9
+        pairs.add(new Pair(3, 7));
+        pairs.add(new Pair(9, 1));
+        pairs.add(new Pair(6, 8));
+        //Journée 10
+        pairs.add(new Pair(9, 2));
+        pairs.add(new Pair(4, 8));
+        pairs.add(new Pair(3, 5));
+        //Journée 11
+        pairs.add(new Pair(6, 1));
+        pairs.add(new Pair(2, 3));
+        pairs.add(new Pair(7, 9));
+        //Journée 12
+        pairs.add(new Pair(8, 1));
+        pairs.add(new Pair(4, 6));
+        pairs.add(new Pair(5, 7));
+        //Journée 13
+        pairs.add(new Pair(2, 1));
+        pairs.add(new Pair(4, 3));
+        pairs.add(new Pair(6, 5));
+        //Journée 14
+        pairs.add(new Pair(1, 7));
+        pairs.add(new Pair(2, 8));
+        pairs.add(new Pair(3, 9));
+        //Journée 15
+        pairs.add(new Pair(7, 4));
+        pairs.add(new Pair(8, 5));
+        pairs.add(new Pair(9, 6));
+        //Journée 16
+        pairs.add(new Pair(3, 1));
+        pairs.add(new Pair(4, 2));
+        pairs.add(new Pair(9, 8));
+        //Journée 17
+        pairs.add(new Pair(4, 1));
+        pairs.add(new Pair(5, 2));
+        pairs.add(new Pair(7, 6));
+        //Journée 18
+        pairs.add(new Pair(6, 3));
+        pairs.add(new Pair(9, 5));
+        pairs.add(new Pair(8, 7));
+        //Journée 19
+        pairs.add(new Pair(5, 1));
+        pairs.add(new Pair(6, 2));
+        pairs.add(new Pair(4, 9));
+        //Journée 20
+        pairs.add(new Pair(3, 8));
+        pairs.add(new Pair(2, 7));
+        pairs.add(new Pair(5, 4));
+        //Journée 21
+        pairs.add(new Pair(7, 3));
+        pairs.add(new Pair(1, 9));
+        pairs.add(new Pair(8, 6));
+        //Journée 22
+        pairs.add(new Pair(2, 9));
+        pairs.add(new Pair(8, 4));
+        pairs.add(new Pair(5, 3));
+        //Journée 23
+        pairs.add(new Pair(1, 6));
+        pairs.add(new Pair(3, 2));
+        pairs.add(new Pair(9, 7));
+        //Journée 24
+        pairs.add(new Pair(1, 8));
+        pairs.add(new Pair(6, 4));
+        pairs.add(new Pair(7, 5));
+        return pairs;
+    }
+
+    //Calendrier pour 9 players avec 4 TV
+    private List<Pair> calendar9Player4TV() {
+        List<Pair> pairs = new ArrayList<Pair>();
+
+        //Calendrier pour 8 joueurs avec 3 TV
+        //Journée 1
+        pairs.add(new Pair(1, 2));
+        pairs.add(new Pair(3, 4));
+        pairs.add(new Pair(5, 6));
+        pairs.add(new Pair(7, 8));
+        //Journée 2
+        pairs.add(new Pair(1, 3));
+        pairs.add(new Pair(2, 4));
+        pairs.add(new Pair(5, 7));
+        pairs.add(new Pair(6, 9));
+        //Journée 3
+        pairs.add(new Pair(1, 4));
+        pairs.add(new Pair(9, 2));
+        pairs.add(new Pair(6, 8));
+        pairs.add(new Pair(3, 5));
+        //Journée 4
+        pairs.add(new Pair(1, 5));
+        pairs.add(new Pair(9, 3));
+        pairs.add(new Pair(7, 2));
+        pairs.add(new Pair(4, 8));
+        //Journée 5
+        pairs.add(new Pair(6, 1));
+        pairs.add(new Pair(2, 3));
+        pairs.add(new Pair(4, 7));
+        pairs.add(new Pair(8, 9));
+        //Journée 6
+        pairs.add(new Pair(7, 1));
+        pairs.add(new Pair(5, 9));
+        pairs.add(new Pair(3, 6));
+        pairs.add(new Pair(8, 2));
+        //Journée 7
+        pairs.add(new Pair(8, 1));
+        pairs.add(new Pair(2, 5));
+        pairs.add(new Pair(4, 6));
+        pairs.add(new Pair(7, 9));
+        //Journée 8
+        pairs.add(new Pair(9, 1));
+        pairs.add(new Pair(4, 5));
+        pairs.add(new Pair(6, 7));
+        pairs.add(new Pair(8, 3));
+        //Journée 9
+        pairs.add(new Pair(2, 6));
+        pairs.add(new Pair(3, 7));
+        pairs.add(new Pair(9, 4));
+        pairs.add(new Pair(5, 8));
+        //Journée 10
+        pairs.add(new Pair(2, 1));
+        pairs.add(new Pair(4, 3));
+        pairs.add(new Pair(6, 5));
+        pairs.add(new Pair(8, 7));
+        //Journée 11
+        pairs.add(new Pair(3, 1));
+        pairs.add(new Pair(4, 2));
+        pairs.add(new Pair(7, 5));
+        pairs.add(new Pair(8, 6));
+        //Journée 12
+        pairs.add(new Pair(4, 1));
+        pairs.add(new Pair(2, 9));
+        pairs.add(new Pair(9, 6));
+        pairs.add(new Pair(5, 3));
+        //Journée 13
+        pairs.add(new Pair(5, 1));
+        pairs.add(new Pair(3, 9));
+        pairs.add(new Pair(2, 7));
+        pairs.add(new Pair(8, 4));
+        //Journée 14
+        pairs.add(new Pair(1, 6));
+        pairs.add(new Pair(3, 2));
+        pairs.add(new Pair(7, 4));
+        pairs.add(new Pair(9, 8));
+        //Journée 15
+        pairs.add(new Pair(1, 7));
+        pairs.add(new Pair(9, 5));
+        pairs.add(new Pair(6, 3));
+        pairs.add(new Pair(2, 8));
+        //Journée 16
+        pairs.add(new Pair(1, 8));
+        pairs.add(new Pair(5, 2));
+        pairs.add(new Pair(6, 4));
+        pairs.add(new Pair(9, 7));
+        //Journée 17
+        pairs.add(new Pair(1, 9));
+        pairs.add(new Pair(5, 4));
+        pairs.add(new Pair(7, 6));
+        pairs.add(new Pair(3, 8));
+        //Journée 18
+        pairs.add(new Pair(6, 2));
+        pairs.add(new Pair(7, 3));
+        pairs.add(new Pair(4, 9));
+        pairs.add(new Pair(8, 5));
+
+        return pairs;
+    }
+
     //Affiche le Calendrier
     public void display() {
         System.out.println();
@@ -671,7 +876,25 @@ public class Calendar {
     //Retourne La journée en cours
     public Week getCurrentWeek(){
         for(Week week : this.weeks){
-            if(week.getCurrentMatch() != null) return week;
+            for(Match match : week.getMatchs()){
+                if(!match.isAlreadyPlayed()) return week;
+            }
+        }
+        return null;
+    }
+
+    //Retourne le match en cours
+    public Match getCurrentMatch(){
+        for(Match match : getCurrentWeek().getMatchs()){
+            if(!match.isAlreadyPlayed()) return match;
+        }
+        return null;
+    }
+
+    //Retourne le match comportant les 2 équipes
+    public Match getMatchWith(Player homePlayer, Player visitorPlayer){
+        for(Week week : this.weeks){
+            if(week.getMatchWith(homePlayer,visitorPlayer) != null) return week.getMatchWith(homePlayer,visitorPlayer);
         }
         return null;
     }

@@ -22,26 +22,31 @@ public class GameWindow extends JFrame {
     public GameWindow() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("TOURNOI FIFA");
-        this.setSize(1000, 600);
+        this.setSize(1000, 400);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
         //Création du Tableau d'affichage du classement
         Object[][] data = {};
-        String[] titleRanking = {"Joueur","Equipe","Points","Diff de buts"};
+        String[] titleRanking = {"Joueur","Equipe","Pts","DB","BP","BC"};
         this.rankingTable = new JTable(new DefaultTableModel(data, titleRanking)) {
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
         this.rankingTable.setFillsViewportHeight(true);
-        this.rankingTable.setRowHeight(18);
+        this.rankingTable.setRowHeight(20);
+        this.rankingTable.getColumn("Joueur").setMaxWidth(90);
+        this.rankingTable.getColumn("Equipe").setMaxWidth(90);
+        this.rankingTable.getColumn("Pts").setMaxWidth(40);
+        this.rankingTable.getColumn("DB").setMaxWidth(40);
+        this.rankingTable.getColumn("BP").setMaxWidth(40);
+        this.rankingTable.getColumn("BC").setMaxWidth(40);
         JScrollPane scRanking = new JScrollPane(this.rankingTable);
-
-        this.ranking.display();
+        scRanking.setPreferredSize(new Dimension(340,Param.NB_PLAYER*this.rankingTable.getRowHeight()+23));
 
         data = initDataCalendarTable();
-        String[] titleCalendar = {"Match","Score"};
+        String[] titleCalendar = {"Equipe Dom","Score","Equipe Ext"};
 
         //Création du Tableau d'affichage du calendrier
         this.calendarTable = new JTable(data, titleCalendar) {
@@ -59,9 +64,14 @@ public class GameWindow extends JFrame {
         };
         this.calendarTable.setFillsViewportHeight(true);
         this.calendarTable.setRowHeight(18);
+        this.calendarTable.getColumn("Equipe Dom").setMaxWidth(100);
+        this.calendarTable.getColumn("Score").setMaxWidth(70);
+        this.calendarTable.getColumn("Equipe Ext").setMaxWidth(100);
         JScrollPane scCalendar = new JScrollPane(this.calendarTable);
+        scCalendar.setPreferredSize(new Dimension(270,300));
 
         JPanel panelCalendar = new JPanel();
+        panelCalendar.setMaximumSize(new Dimension(100,100));
         panelCalendar.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         panelCalendar.add(scCalendar);
         panelCalendar.add(this.validButton);
@@ -76,13 +86,39 @@ public class GameWindow extends JFrame {
         this.getContentPane().add(mainPanel);
         this.setVisible(true);
 
+        //initialise le tableau de classement
+        updateRankingTable();
+
+        //Affiche le nombre de matchs à domicile et à l'exterieur
+        /*for(Player player : Param.PLAYERS){
+            System.out.println(player.getName() + " - home : " + player.getNumberHomeMatch() + " - away : " + player.getNumberAwayMatch());
+        }*/
+
         //Fonction déclanché par le validButton
         ActionListener action = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Week currentWeek = calendar.getCurrentWeek();
-                ScoreWindow scoreWindow = new ScoreWindow(null,"Score Match",true, currentWeek);
-                String score = scoreWindow.getScore();
-                addScoreToTable(score);
+                Match match = new Match();
+                String homeTeam = "home";
+                String visitorTeam = "visitor";
+                if(calendarTable.getSelectedRow() == -1){
+                    match = calendar.getCurrentMatch();
+                    homeTeam = match.getHomePlayer().getName();
+                    visitorTeam = match.getVisitorPlayer().getName();
+                }
+                else{
+                    homeTeam = calendarTable.getValueAt(calendarTable.getSelectedRow(),0).toString();
+                    visitorTeam = calendarTable.getValueAt(calendarTable.getSelectedRow(),2).toString();
+                    match = calendar.getMatchWith(Param.getPlayerByName(homeTeam),Param.getPlayerByName(visitorTeam));
+                }
+                calendarTable.clearSelection();
+                ScoreWindow scoreWindow = new ScoreWindow(null,"Score Match",true, homeTeam, visitorTeam);
+                if(scoreWindow.sendData()){
+                    String score = scoreWindow.getScore();
+                    match.setResult(score);
+                    addScoreToTable(match,score);
+                    ranking.updateRanking();
+                    updateRankingTable();
+                }
             }
         };
 
@@ -93,14 +129,14 @@ public class GameWindow extends JFrame {
     //Initialise le tableau de calendrier
     public Object[][] initDataCalendarTable() {
         Object[][] data = new Object[Param.NB_MATCH][2];
-        String matchStr;
+        String homeTeam;
+        String visitorTeam;
         int compteur = 0;
         for (Week week : this.calendar.getWeeks()) {
             for (Match match : week.getMatchs()) {
-                matchStr = match.getHomePlayer().getName();
-                matchStr += " - ";
-                matchStr += match.getVisitorPlayer().getName();
-                data[compteur] = new Object[]{matchStr, ""};
+                homeTeam = match.getHomePlayer().getName();
+                visitorTeam = match.getVisitorPlayer().getName();
+                data[compteur] = new Object[]{homeTeam, "", visitorTeam};
                 compteur++;
             }
         }
@@ -300,22 +336,12 @@ public class GameWindow extends JFrame {
         return mandatoryWaiters;
     }
 
-    public void addScoreToTable(String score){
-        int row = (this.calendar.getCurrentWeek().getWeekNumber() - 1) * Param.NB_TV;
-        for(Match match : this.calendar.getCurrentWeek().getMatchs()){
-            if(match.getResult() != "") row++;
-        }
-
+    public void addScoreToTable(Match match, String score){
+        int row = findRowByMatch(match);
         this.calendarTable.setValueAt(score,row,1);
-        this.calendar.getCurrentWeek().getCurrentMatch().setResult(score);
-        this.ranking.updateRanking();
-        this.ranking.display();
-        updateRankingTable();
     }
 
     public void updateRankingTable(){
-        //this.rankingTable.removeAll();
-
         DefaultTableModel model = (DefaultTableModel) this.rankingTable.getModel();
         int rowCount = model.getRowCount();
         for(int row=rowCount-1; row>=0; row--){
@@ -323,8 +349,19 @@ public class GameWindow extends JFrame {
         }
         for(Pair pair : this.ranking.getRanking()) {
             Player player = (Player)pair.getValue();
-            model.addRow(new Object[]{player.getName(),player.getTeam(),player.getPoints(),player.getGoalDifference()});
+            model.addRow(new Object[]{player.getName(),player.getTeam(),player.getPoints(),player.getGoalDifference(),player.getGoalsScored(),player.getGoalsTaken()});
         }
+    }
+
+    private int findRowByMatch(Match match1){
+        int row = 0;
+        for (Week week : this.calendar.getWeeks()){
+            for (Match match2 : week.getMatchs()){
+                if(match1 == match2) return row;
+                row++;
+            }
+        }
+        return row;
     }
 }
 

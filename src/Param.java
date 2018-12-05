@@ -15,6 +15,14 @@ public final class Param  {
         return null;
     }
 
+    //Retourne le player lié au nom
+    public static Player getPlayerByName(String name) {
+        for (Player player : Param.PLAYERS) {
+            if (name == player.getName()) return player;
+        }
+        return null;
+    }
+
     //Retourne le player lié au number
     public static void playersDisplay() {
         System.out.println();

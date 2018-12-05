@@ -45,18 +45,31 @@ public class Main {
         players8.add(new Player("Fafa","Real"));
         players8.add(new Player("Jacquou","TsoinTsoin"));
 
-        Param.NB_TV = 3;
-        Param.NB_PLAYER = 8;
-        Param.NB_MATCH = 56;
-        Param.PLAYERS = new ArrayList<>(players8);
+        List<Player> players9 = new ArrayList<Player>();
+        players9.add(new Player("Binou","Juv"));
+        players9.add(new Player("Landou","Belgique"));
+        players9.add(new Player("Dadou","PSG"));
+        players9.add(new Player("Ronron","Barca"));
+        players9.add(new Player("Toto","France"));
+        players9.add(new Player("Geo","Man U"));
+        players9.add(new Player("Fafa","Real"));
+        players9.add(new Player("Jacquou","TsoinTsoin"));
+        players9.add(new Player("Michou","PouetPouet"));
 
+        initParam(players7,3);
         GameWindow window = new GameWindow();
 
         /*** Test full APP ***/
         //FirstWindow window = new FirstWindow();
     }
 
-    private void initParam(){
-
+    private static void initParam(List<Player> players,int nbTV){
+        Param.NB_TV = nbTV;
+        Param.NB_PLAYER = players.size();
+        for(int i=Param.NB_PLAYER-1; i>=0; i--) {
+            Param.NB_MATCH += i;
+        }
+        Param.NB_MATCH *= 2;
+        Param.PLAYERS = new ArrayList<>(players);
     }
 }

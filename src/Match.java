@@ -4,6 +4,7 @@ public class Match {
     private String result;
     private int homeScore;
     private int visitorScore;
+    private boolean alreadyPlayed = false;
 
     public Match(){
         this.result = "";
@@ -28,15 +29,29 @@ public class Match {
 
     //*** ACCESSEURS ***
     //Retourne l'équipe à domicile
-    public Player getHomePlayer() {return homePlayer;}
+    public Player getHomePlayer() {
+        return homePlayer;
+    }
     //Retourne l'équipe à l'extérieure
-    public Player getVisitorPlayer() {return visitorPlayer;}
+    public Player getVisitorPlayer() {
+        return visitorPlayer;
+    }
     //Retourne le résultat
-    public String getResult() {return result;}
+    public String getResult() {
+        return result;
+    }
     //Retourne le score de l'équipe domicile
-    public int getHomeScore() {return homeScore;}
+    public int getHomeScore() {
+        return homeScore;
+    }
     //Retourne le score de l'équipe extérieur
-    public int getVisitorScore() {return visitorScore;}
+    public int getVisitorScore() {
+        return visitorScore;
+    }
+    //Retourne l'état du match
+    public boolean isAlreadyPlayed(){
+        return alreadyPlayed;
+    }
 
     //*** MUTATEURS ***
     //Modifie l'équipe à domicile
@@ -81,9 +96,19 @@ public class Match {
             this.homePlayer.setPoints(this.homePlayer.getPoints() + 1);
             this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() + 1);
         }
+
+        this.alreadyPlayed = true;
     }
     //Modifie le score de l'équipe domicile
-    public void setHomeScore(int homeScore) {this.homeScore = homeScore;}
+    public void setHomeScore(int homeScore) {
+        this.homeScore = homeScore;
+    }
     //Modifie le score de l'équipe extérieur
-    public void setVisitorScore(int visitorScore) {this.visitorScore = visitorScore;}
+    public void setVisitorScore(int visitorScore) {
+        this.visitorScore = visitorScore;
+    }
+    //Modifie l'état du match
+    public void setAlreadyPlayed(boolean alreadyPlayed){
+        this.alreadyPlayed = alreadyPlayed;
+    }
 }

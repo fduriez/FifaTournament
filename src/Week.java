@@ -29,9 +29,9 @@ public class Week {
         }
     }
 
-    public Match getCurrentMatch(){
+    public Match getMatchWith(Player homePlayer,Player visitorPlayer){
         for(Match match : this.matchs){
-            if(match.getResult() == "") return match;
+            if((match.getHomePlayer() == homePlayer) && (match.getVisitorPlayer() == visitorPlayer)) return match;
         }
         return null;
     }

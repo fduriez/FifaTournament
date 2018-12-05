@@ -3,7 +3,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ScoreWindow extends JDialog {
-
     private JLabel homeLabel = new JLabel("home");
     private JLabel versusLabel = new JLabel("  VS  ");
     private JLabel visitorLabel = new JLabel("visitor");
@@ -11,7 +10,9 @@ public class ScoreWindow extends JDialog {
     private JComboBox visitorScore = new JComboBox();
     private JButton validButton = new JButton("Valider");
 
-    public ScoreWindow(JFrame parent, String title, boolean modal, Week currentWeek){
+    private boolean sendData = false;
+
+    public ScoreWindow(JFrame parent, String title, boolean modal, String homePlayerName, String visitorPlayerName){
         super(parent, title, modal);
         this.setSize(300, 120);
         this.setLocationRelativeTo(null);
@@ -20,12 +21,13 @@ public class ScoreWindow extends JDialog {
         this.validButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                sendData = true;
                 setVisible(false);
             }
         });
 
-        this.homeLabel.setText(currentWeek.getCurrentMatch().getHomePlayer().getName());
-        this.visitorLabel.setText(currentWeek.getCurrentMatch().getVisitorPlayer().getName());
+        this.homeLabel.setText(homePlayerName);
+        this.visitorLabel.setText(visitorPlayerName);
 
         String[] score = {"0","1","2","3","4","5","6","7","8","9","10"};
         this.homeScore = new JComboBox(score);
@@ -56,4 +58,6 @@ public class ScoreWindow extends JDialog {
         score += (String) this.visitorScore.getSelectedItem();
         return score;
     }
+
+    public boolean sendData(){ return this.sendData; }
 }
