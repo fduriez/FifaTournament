@@ -68,36 +68,64 @@ public class Match {
     }
     //Modifie le résultat
     public void setResult(String result) {
+        //SI score déjà rentré -> Suppression des stats
         if(this.result != ""){
+            //Enlève 1 match joué aux joueurs
+            this.homePlayer.setNumberMatchPlayed(this.homePlayer.getNumberMatchPlayed() - 1);
+            this.visitorPlayer.setNumberMatchPlayed(this.visitorPlayer.getNumberMatchPlayed() - 1);
 
+            //Enlève les buts aux joueurs
+            this.homePlayer.setGoalsScored(this.homePlayer.getGoalsScored() - this.homeScore);
+            this.homePlayer.setGoalsTaken(this.homePlayer.getGoalsTaken() - this.visitorScore);
+            this.visitorPlayer.setGoalsScored(this.visitorPlayer.getGoalsScored() - this.visitorScore);
+            this.visitorPlayer.setGoalsTaken(this.visitorPlayer.getGoalsTaken() - this.homeScore);
+
+            //Enlève les points aux joueurs
+            if(this.homeScore > this.visitorScore){
+                this.homePlayer.setPoints(this.homePlayer.getPoints() - 3);
+            }
+            else if (this.homeScore < this.visitorScore){
+                this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() - 3);
+            }
+            else{
+                this.homePlayer.setPoints(this.homePlayer.getPoints() - 1);
+                this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() - 1);
+            }
+
+            this.result = "";
+            this.alreadyPlayed = false;
         }
-        this.result = result;
-        result = result.replaceAll(" ","");
+        if(result != "") {
+            this.result = result;
+            result = result.replaceAll(" ", "");
 
-        //Ajoute score domicile & extérieur
-        String[] a = result.split("-");
-        this.homeScore = Integer.parseInt(a[0]);
-        this.visitorScore = Integer.parseInt(a[1]);
+            //Ajoute 1 match joué aux joueurs
+            this.homePlayer.setNumberMatchPlayed(this.homePlayer.getNumberMatchPlayed() + 1);
+            this.visitorPlayer.setNumberMatchPlayed(this.visitorPlayer.getNumberMatchPlayed() + 1);
 
-        //Ajoute les buts aux joueurs
-        this.homePlayer.setGoalsScored(this.homePlayer.getGoalsScored() + this.homeScore);
-        this.homePlayer.setGoalsTaken(this.homePlayer.getGoalsTaken() + this.visitorScore);
-        this.visitorPlayer.setGoalsScored(this.visitorPlayer.getGoalsScored() + this.visitorScore);
-        this.visitorPlayer.setGoalsTaken(this.visitorPlayer.getGoalsTaken() + this.homeScore);
+            //Ajoute score domicile & extérieur
+            String[] a = result.split("-");
+            this.homeScore = Integer.parseInt(a[0]);
+            this.visitorScore = Integer.parseInt(a[1]);
 
-        //Ajoute les points aux joueurs
-        if(this.homeScore > this.visitorScore){
-            this.homePlayer.setPoints(this.homePlayer.getPoints() + 3);
+            //Ajoute les buts aux joueurs
+            this.homePlayer.setGoalsScored(this.homePlayer.getGoalsScored() + this.homeScore);
+            this.homePlayer.setGoalsTaken(this.homePlayer.getGoalsTaken() + this.visitorScore);
+            this.visitorPlayer.setGoalsScored(this.visitorPlayer.getGoalsScored() + this.visitorScore);
+            this.visitorPlayer.setGoalsTaken(this.visitorPlayer.getGoalsTaken() + this.homeScore);
+
+            //Ajoute les points aux joueurs
+            if (this.homeScore > this.visitorScore) {
+                this.homePlayer.setPoints(this.homePlayer.getPoints() + 3);
+            } else if (this.homeScore < this.visitorScore) {
+                this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() + 3);
+            } else {
+                this.homePlayer.setPoints(this.homePlayer.getPoints() + 1);
+                this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() + 1);
+            }
+
+            this.alreadyPlayed = true;
         }
-        else if (this.homeScore < this.visitorScore){
-            this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() + 3);
-        }
-        else{
-            this.homePlayer.setPoints(this.homePlayer.getPoints() + 1);
-            this.visitorPlayer.setPoints(this.visitorPlayer.getPoints() + 1);
-        }
-
-        this.alreadyPlayed = true;
     }
     //Modifie le score de l'équipe domicile
     public void setHomeScore(int homeScore) {

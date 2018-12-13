@@ -873,6 +873,14 @@ public class Calendar {
         }
     }
 
+    //Vérifie si un match est dans la journée en cours
+    public boolean isMatchInCurrentWeek(Match match1){
+        for(Match match2 : this.getCurrentWeek().getMatchs()){
+            if (match1.equals(match2)) return true;
+        }
+        return false;
+    }
+
     //Retourne La journée en cours
     public Week getCurrentWeek(){
         for(Week week : this.weeks){

@@ -9,6 +9,7 @@ public class Player {
     private int numberWaiting;
     private int numberHomeMatch;
     private int numberAwayMatch;
+    private int numberMatchPlayed;
 
     //Constructeur par défault
     public Player() {
@@ -19,6 +20,7 @@ public class Player {
         this.goalsTaken = 0;
         this.goalDifference = 0;
         this.playerNumber = 0;
+        this.numberMatchPlayed = 0;
     }
 
     //Constructeur avec param (nom)
@@ -30,6 +32,7 @@ public class Player {
         this.goalsTaken = 0;
         this.goalDifference = 0;
         this.playerNumber = 0;
+        this.numberMatchPlayed = 0;
     }
 
     //Affichage des variables de la classe
@@ -43,6 +46,7 @@ public class Player {
         System.out.println("Buts Pris: " + this.goalsTaken);
         System.out.println("Différence de Buts: " + this.goalDifference);
         System.out.println("Numero de joueur: " + this.playerNumber);
+        System.out.println("Nombre de match jouer: " + this.numberMatchPlayed);
     }
 
     //*** ACCESSEURS ***
@@ -66,6 +70,8 @@ public class Player {
     public int getNumberHomeMatch() {return numberHomeMatch;}
     //Retourne le nombre de match à l'exterieur
     public int getNumberAwayMatch() {return numberAwayMatch;}
+    //Retourne le nombre de match joué
+    public int getNumberMatchPlayed() {return this.numberMatchPlayed;}
 
     //*** MUTATEURS ***
     //Modifie le nom
@@ -94,4 +100,6 @@ public class Player {
     public void setNumberHomeMatch(int numberHomeMatch) {this.numberHomeMatch = numberHomeMatch;}
     //Modifie le nombre de match à l'exterieur
     public void setNumberAwayMatch(int numberAwayMatch) {this.numberAwayMatch = numberAwayMatch;}
+    //Modifie le nombre de match joué
+    public void setNumberMatchPlayed(int numberMatchPlayed) {this.numberMatchPlayed = numberMatchPlayed;}
 }
