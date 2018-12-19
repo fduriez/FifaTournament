@@ -3,53 +3,90 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ranking {
-    private List<Pair> ranking = new ArrayList<>();
+    private List<Player> generalRanking = new ArrayList<>();
+    private List<Player> matchRanking = new ArrayList<>();
+    private List<Pair> betRanking = new ArrayList<>();
 
     public Ranking(){
-        int compteur = 1;
         for(Player player : Param.PLAYERS){
-            this.ranking.add(new Pair(compteur,player));
-            compteur++;
+            this.generalRanking.add(player);
+            this.matchRanking.add(player);
         }
     }
 
     public void updateRanking(){
-        int index = 1;
-        this.ranking = new ArrayList<>();
-        for(Player player1 : Param.PLAYERS){
-            if(this.ranking.isEmpty()) this.ranking.add(index-1,new Pair(index,player1));
+        int index = 0;
+
+        //MAJ classement des matchs
+        this.matchRanking = new ArrayList<>();
+        for(Player player : Param.PLAYERS){
+            index = 0;
+            if(this.matchRanking.isEmpty()) this.matchRanking.add(player);
             else{
-                for(Pair pair : this.ranking){
-                    Player player2 = (Player)pair.getValue();
-                    // 1- Différence de points
-                    if(player2.getPoints() > player1.getPoints()) index++;
+                for(Player player2 : this.matchRanking){
+                    // 1- Nombre de points
+                    if(player2.getMatchPoints() > player.getMatchPoints()) index++;
                     // 2 - Différence de buts
-                    if((player2.getPoints() == player1.getPoints()) && (player2.getGoalDifference() > player1.getGoalDifference())) index++;
-                    // 3 - Différence de buts marqués
-                    if((player2.getPoints() == player1.getPoints()) && (player2.getGoalDifference() == player1.getGoalDifference()) && (player2.getGoalsScored() > player1.getGoalsScored())) index++;
+                    if((player2.getMatchPoints() == player.getMatchPoints()) && (player2.getGoalDifference() > player.getGoalDifference())) index++;
+                    // 3 - Nombre de buts marqués
+                    if((player2.getMatchPoints() == player.getMatchPoints()) && (player2.getGoalDifference() == player.getGoalDifference()) && (player2.getGoalsScored() > player.getGoalsScored())) index++;
                 }
-                this.ranking.add(index-1,new Pair(index,player1));
+                this.matchRanking.add(index,player);
             }
-            index = 1;
+        }
+
+        //MAJ classement général
+        this.generalRanking = new ArrayList<>();
+        for(Player player : Param.PLAYERS){
+            index = 0;
+            if(this.generalRanking.isEmpty()) this.generalRanking.add(player);
+            else{
+                for(Player player2 : this.generalRanking){
+                    // 1- Nombre de points Total
+                    if(player2.getTotalPoints() > player.getTotalPoints()) index++;
+                    // 2 - Classement en match
+                    if((player2.getTotalPoints() == player.getTotalPoints()) && (this.matchRanking.indexOf(player2) < this.matchRanking.indexOf(player))) index++;
+                }
+                this.generalRanking.add(index,player);
+            }
         }
     }
 
     public void display(){
         System.out.println("********** Ranking **********");
 
-        for(Pair pair : this.ranking){
-            Player player = (Player) pair.getValue();
-            System.out.println(pair.getKey() + " - " + player.getPoints() + "pts" + " - " + player.getGoalDifference() + "Diff" + " - " + player.getName());
+        for(Player player : this.generalRanking){
+            System.out.println((this.generalRanking.indexOf(player)+1) + " - " + player.getTotalPoints() + "pts" + " - " + player.getGoalDifference() + "Diff" + " - " + player.getName());
         }
 
         System.out.println("********** Fin Ranking **********");
     }
 
     //*** ACCESSEURS ***
-    //Retourne le classement des joueurs
-    public List<Pair> getRanking(){return this.ranking;}
+    //Retourne le classement général des joueurs
+    public List<Player> getGeneralRanking(){
+        return this.generalRanking;
+    }
+    //Retourne le classement en match des joueurs
+    public List<Player> getMatchRanking(){
+        return this.matchRanking;
+    }
+    //Retourne le classement en pari des joueurs
+    public List<Pair> getBetRanking(){
+        return this.betRanking;
+    }
 
     //*** MUTATEURS ***
-    //Modifie le classement des joueurs
-    public void setRanking(List<Pair> ranking){this.ranking=ranking;}
+    //Modifie le classement général des joueurs
+    public void setGeneralRanking(List<Player> generalRanking){
+        this.generalRanking = generalRanking;
+    }
+    //Modifie le classement en match des joueurs
+    public void setMatchRanking(List<Player> matchRanking){
+        this.matchRanking = matchRanking;
+    }
+    //Modifie le classement en pari des joueurs
+    public void setBetRanking(List<Pair> betRanking){
+        this.betRanking = betRanking;
+    }
 }

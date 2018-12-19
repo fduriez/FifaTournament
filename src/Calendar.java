@@ -75,6 +75,8 @@ public class Calendar {
             if (week.getMatchs().size() == Param.NB_TV) {
                 weekNumber++;
                 week.setWeekNumber(weekNumber);
+                week.initWaiters();
+                week.initBettor();
                 this.weeks.add(week);
                 week = new Week();
             }
@@ -856,10 +858,11 @@ public class Calendar {
         for (Week week : this.weeks) {
             System.out.println("*** Journée " + week.getWeekNumber() + " ***");
             for (Match match : week.getMatchs()) {
-                System.out.println(match.getHomePlayer().getPlayerNumber() + " - " + match.getVisitorPlayer().getPlayerNumber());
-            }
-            for (Player player : week.getWaitingPlayer()) {
-                System.out.print(player.getPlayerNumber() + " ");
+                System.out.print("*" + match.getHomePlayer().getName() + " - " + match.getVisitorPlayer().getName() + "      Bettors : ");
+                for(Bet bet : match.getBets()){
+                    System.out.print(bet.getPlayer().getName() + ",");
+                }
+                System.out.println();
             }
             System.out.println();
             System.out.println();
@@ -879,6 +882,14 @@ public class Calendar {
             if (match1.equals(match2)) return true;
         }
         return false;
+    }
+
+    //Retourne la journée contenant le match
+    public Week getWeekByMatch(Match match){
+        for(Week week : this.weeks){
+            if(week.getMatchs().contains(match)) return week;
+        }
+        return null;
     }
 
     //Retourne La journée en cours

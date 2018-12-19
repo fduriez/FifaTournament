@@ -56,7 +56,7 @@ public class Main {
         players9.add(new Player("Jacquou","TsoinTsoin"));
         players9.add(new Player("Michou","PouetPouet"));
 
-        initParam(players7,3);
+        initParam(players7,2);
         GameWindow window = new GameWindow();
 
         /*** Test full APP ***/

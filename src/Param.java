@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Param  {
+    public static final int NB_BETTOR_MINI = 3;
     public static int NB_PLAYER;
     public static int NB_TV;
     public static int NB_MATCH;
