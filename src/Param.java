@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,8 @@ public final class Param  {
     public static int NB_TV;
     public static int NB_MATCH;
     public static List<Player> PLAYERS = new ArrayList<>();
+
+    public static Font fontTitlePanel = new Font("rockwell", Font.BOLD,15);
 
     //Retourne le player lié au number
     public static Player getPlayerByNumber(int number) {
