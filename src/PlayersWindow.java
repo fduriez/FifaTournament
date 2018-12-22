@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PlayersWindow extends JFrame implements ActionListener{
     private JTextField nameTextField = new JTextField();
-    private JTextField teamTextField = new JTextField();
+    private JComboBox teamComboBox = new JComboBox();
     private JButton addButton = new JButton("Ajouter");
     private JButton deleteButton = new JButton("Supprimer");
     private JButton finishButton = new JButton("Valider");
@@ -44,11 +44,49 @@ public class PlayersWindow extends JFrame implements ActionListener{
         nameTextPrompt.changeAlpha(0.5f);
         nameTextPrompt.changeStyle(Font.BOLD + Font.ITALIC);
 
-        //Text de fond du teamTextField
-        TextPrompt teamTextPrompt = new TextPrompt("Team", this.teamTextField);
-        teamTextPrompt.setForeground( Color.DARK_GRAY );
-        teamTextPrompt.changeAlpha(0.5f);
-        teamTextPrompt.changeStyle(Font.BOLD + Font.ITALIC);
+        List<String> teamNames = new ArrayList<String>();
+        //teamNames.add("Premier League");
+        teamNames.add("Arsenal");
+        teamNames.add("Chelsea");
+        teamNames.add("Liverpool");
+        teamNames.add("Manchester City");
+        teamNames.add("Manchester United");
+        teamNames.add("Tottenham");
+
+        //teamNames.add("Ligue 1");
+        teamNames.add("Lyon");
+        teamNames.add("OM");
+        teamNames.add("PSG");
+
+        //teamNames.add("Liga");
+        teamNames.add("Atletico Madrid");
+        teamNames.add("Barcelone");
+        teamNames.add("Real Madrid");
+        teamNames.add("Seville");
+
+        //teamNames.add("Bundesliga");
+        teamNames.add("Bayern Munich");
+        teamNames.add("Borussia Dortmund");
+
+        //teamNames.add("Serie A");
+        teamNames.add("AC Milan");
+        teamNames.add("As Roma");
+        teamNames.add("Inter Milan");
+        teamNames.add("Juventus");
+        teamNames.add("Naples");
+
+        //teamNames.add("Equipe Nationale");
+        teamNames.add("Allemagne");
+        teamNames.add("Angleterre");
+        teamNames.add("Argentine");
+        teamNames.add("Belgique");
+        teamNames.add("Bresil");
+        teamNames.add("Espagne");
+        teamNames.add("France");
+        teamNames.add("Italie");
+
+        this.teamComboBox = new JComboBox(teamNames.toArray(new String[teamNames.size()]));
+        this.teamComboBox.setRenderer(new ListRenderer());
 
         //Gestion des polices d'écriture
         Font fontTable = new Font("rockwell", Font.BOLD,15);
@@ -60,9 +98,7 @@ public class PlayersWindow extends JFrame implements ActionListener{
         this.finishButton.setFont(fontButton);
         //Font fontTextField = new Font("cooper black", Font.BOLD,20);
         this.nameTextField.setFont(fontTable);
-        this.teamTextField.setFont(fontTable);
         this.nameTextField.setHorizontalAlignment(JTextField.CENTER);
-        this.teamTextField.setHorizontalAlignment(JTextField.CENTER);
 
         //Positionnement des composants de la fenêtre
         //Positionnement via BoxLayout
@@ -79,7 +115,7 @@ public class PlayersWindow extends JFrame implements ActionListener{
         g111.setVgap(10);
         p111.setLayout(g111);
         p111.add(this.nameTextField);
-        p111.add(this.teamTextField);
+        p111.add(this.teamComboBox);
         p11.add(p111);
         p11.add(this.addButton);
         p11.add(this.deleteButton);
@@ -101,6 +137,19 @@ public class PlayersWindow extends JFrame implements ActionListener{
         p1.setSize(500,300);
         p1.add(p11);
         p1.add(p12);
+
+
+
+        //this.teamComboBox.add(new ImageIO().read(this.getClass().getResource("Blason Fifa/PSG.png")));
+
+        /*BufferedImage testPic = null;
+        try {
+            testPic = ImageIO.read(this.getClass().getResource("Blason Fifa/PSG.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //JLabel wIcon = new JLabel(new ImageIcon(wPic));
+        this.visitorLabel.setIcon(new ImageIcon(testPic));*/
 
         this.getContentPane().add(p1);
         this.setVisible(true);
@@ -124,18 +173,18 @@ public class PlayersWindow extends JFrame implements ActionListener{
     class AddButtonListener implements ActionListener {
         //Redéfinition de la méthode actionPerformed()
         public void actionPerformed(ActionEvent arg0) {
-            if((!nameTextField.getText().isEmpty()) && (!teamTextField.getText().isEmpty())) {
+            String teamName = (String)teamComboBox.getSelectedItem();
+            if((!nameTextField.getText().isEmpty()) && (!teamName.isEmpty())) {
                 String name = nameTextField.getText();
-                String team = teamTextField.getText();
-                Param.PLAYERS.add(new Player(name,team));
+                Param.PLAYERS.add(new Player(name,teamName));
 
-                ((DefaultTableModel) table.getModel()).addRow(new Object[]{name,team});
+                ((DefaultTableModel) table.getModel()).addRow(new Object[]{name,teamName});
 
                 if(Param.PLAYERS.size() == Param.NB_PLAYER) finishButton.setEnabled(true);
                 else finishButton.setEnabled(false);
 
                 nameTextField.setText("");
-                teamTextField.setText("");
+                //teamComboBox.removeItem(teamName);
                 nameTextField.requestFocus();
             }
         }

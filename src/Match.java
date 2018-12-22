@@ -47,7 +47,6 @@ public class Match {
         //Recherche de pari EXACT
         for(Bet bet : this.bets){
             if((bet.getHomeScore() == this.homeScore) && (bet.getVisitorScore() == this.visitorScore)) this.betWinners.add(bet.getPlayer());
-            System.out.println("1 - Test Exact");
         }
         if(!this.betWinners.isEmpty())this.betPoints = 2;
 
@@ -61,7 +60,6 @@ public class Match {
             for(Bet bet : this.bets){
                 int betGoalDifference = bet.getHomeScore() - bet.getVisitorScore();
                 if(goalDifference == betGoalDifference) this.betWinners.add(bet.getPlayer());
-                System.out.println("2 - Test bon ecart");
             }
 
             //SI pas de pari avec le bon écart && pas un match nul
@@ -75,7 +73,6 @@ public class Match {
                 for(Bet bet : this.bets){
                     int betGoalDifference = bet.getHomeScore() - bet.getVisitorScore();
                     if((closestGoalDifference == Math.abs(betGoalDifference-goalDifference)) && (isSameWinner(bet))) this.betWinners.add(bet.getPlayer());
-                    System.out.println("3 - Test ecart proche");
                 }
             }
 
@@ -92,7 +89,6 @@ public class Match {
                 for(Player player : new ArrayList<>(this.betWinners)){
                     int betGoalSum = findBetFor(player).getHomeScore() + findBetFor(player).getVisitorScore();
                     if(closestGoalSum != Math.abs(betGoalSum-goalSum)) this.betWinners.remove(player);
-                    System.out.println("4 - Test nombre de buts");
                 }
             }
         }

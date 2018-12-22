@@ -27,13 +27,13 @@ public class Main {
         players6.add(new Player("Geo","Man U"));
 
         List<Player> players7 = new ArrayList<Player>();
-        players7.add(new Player("Binou","Juv"));
+        players7.add(new Player("Binou","Juventus"));
         players7.add(new Player("Landou","Belgique"));
         players7.add(new Player("Dadou","PSG"));
-        players7.add(new Player("Ronron","Barca"));
+        players7.add(new Player("Ronron","Barcelone"));
         players7.add(new Player("Toto","France"));
-        players7.add(new Player("Geo","Man U"));
-        players7.add(new Player("Fafa","Real"));
+        players7.add(new Player("Geo","Manchester United"));
+        players7.add(new Player("Fafa","Real Madrid"));
 
         List<Player> players8 = new ArrayList<Player>();
         players8.add(new Player("Binou","Juv"));
@@ -55,6 +55,8 @@ public class Main {
         players9.add(new Player("Fafa","Real"));
         players9.add(new Player("Jacquou","TsoinTsoin"));
         players9.add(new Player("Michou","PouetPouet"));
+
+        Param.initIconTeam();
 
         initParam(players7,2);
         GameWindow window = new GameWindow();

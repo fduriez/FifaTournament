@@ -12,7 +12,7 @@ public class ScoreWindow extends JDialog {
 
     private boolean sendData = false;
 
-    public ScoreWindow(JFrame parent, String title, boolean modal, String homePlayerName, String visitorPlayerName){
+    public ScoreWindow(JFrame parent, String title, boolean modal, String homePlayerName, String visitorPlayerName) {
         super(parent, title, modal);
         this.setSize(300, 120);
         this.setLocationRelativeTo(null);

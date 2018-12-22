@@ -1,5 +1,3 @@
-import javafx.util.Pair;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
@@ -45,7 +43,7 @@ public class GameWindow extends JFrame {
 
         //Création du Tableau d'affichage du classement général
         Object[][] data = {};
-        String[] titleRanking = {"Joueur","Equipe","P Total","P Match","P Pari"};
+        String[] titleRanking = {"","Joueur","P Total","P Match","P Pari"};
         this.generalRankingTable = new JTable(new DefaultTableModel(data, titleRanking)) {
             public boolean isCellEditable(int row, int col) {
                 return false;
@@ -53,21 +51,23 @@ public class GameWindow extends JFrame {
         };
         this.generalRankingTable.setFillsViewportHeight(true);
         this.generalRankingTable.setRowHeight(20);
+        this.generalRankingTable.getColumn("").setMaxWidth(40);
         this.generalRankingTable.getColumn("Joueur").setMaxWidth(90);
-        this.generalRankingTable.getColumn("Equipe").setMaxWidth(90);
         this.generalRankingTable.getColumn("P Total").setMaxWidth(60);
         this.generalRankingTable.getColumn("P Match").setMaxWidth(60);
         this.generalRankingTable.getColumn("P Pari").setMaxWidth(60);
         JScrollPane scGeneralRanking = new JScrollPane(this.generalRankingTable);
-        scGeneralRanking.setPreferredSize(new Dimension(360,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
-        scGeneralRanking.setMaximumSize(new Dimension(360,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
-        scGeneralRanking.setMinimumSize(new Dimension(360,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
+        scGeneralRanking.setPreferredSize(new Dimension(310,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
+        scGeneralRanking.setMaximumSize(new Dimension(310,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
+        scGeneralRanking.setMinimumSize(new Dimension(310,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
 
         //Empêche la modification de la taille du calendrier et la sélection des cellules
         this.generalRankingTable.setCellSelectionEnabled(false);
         this.generalRankingTable.setRequestFocusEnabled(false);
         this.generalRankingTable.getTableHeader().setReorderingAllowed(false);
         this.generalRankingTable.getTableHeader().setResizingAllowed(false);
+
+        this.generalRankingTable.getColumnModel().getColumn(0).setCellRenderer(new TableRenderer());
 
         /**********************************/
         /** Tableau Classement par match **/
@@ -124,6 +124,7 @@ public class GameWindow extends JFrame {
         };
         this.calendarTable.setFillsViewportHeight(true);
         this.calendarTable.setRowHeight(18);
+        this.calendarTable.setFont(Param.fontCalendar);
         this.calendarTable.getColumn("Equipe Dom").setMaxWidth(100);
         this.calendarTable.getColumn("Score").setMaxWidth(70);
         this.calendarTable.getColumn("Equipe Ext").setMaxWidth(100);
@@ -180,7 +181,7 @@ public class GameWindow extends JFrame {
         /** Organisation du panel des boutons de pari **/
         /***********************************************/
 
-        TitledBorder titledBorderBetsButton = new TitledBorder("Boutons des paris");
+        TitledBorder titledBorderBetsButton = new TitledBorder("Paris");
         titledBorderBetsButton.setTitleFont(Param.fontTitlePanel);
 
         this.initBetsButton();
@@ -190,6 +191,7 @@ public class GameWindow extends JFrame {
         for (JButton button : this.betsButton){
             button.setMaximumSize(new Dimension(150,50));
             button.setMinimumSize(new Dimension(150,50));
+            button.setFont(Param.fontBetsButton);
             panelBetsButtons.add(button);
         }
         panelBetsButtons.setBorder(titledBorderBetsButton);
@@ -605,13 +607,14 @@ public class GameWindow extends JFrame {
         for(int row=rowCount-1; row>=0; row--){
             model.removeRow(row);
         }
+        int row = 0;
         for(Player player : this.ranking.getGeneralRanking()) {
-            model.addRow(new Object[]{player.getName(),player.getTeam(),this.decimalFormat.format(player.getTotalPoints()),player.getMatchPoints(),this.decimalFormat.format(player.getBetsPoints())});
+            model.addRow(new Object[]{player.getTeam(),player.getName(),this.decimalFormat.format(player.getTotalPoints()),player.getMatchPoints(),this.decimalFormat.format(player.getBetsPoints())});
         }
 
         model = (DefaultTableModel) this.matchRankingTable.getModel();
         rowCount = model.getRowCount();
-        for(int row=rowCount-1; row>=0; row--){
+        for(row=rowCount-1; row>=0; row--){
             model.removeRow(row);
         }
         for(Player player : this.ranking.getMatchRanking()) {
