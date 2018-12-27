@@ -21,9 +21,7 @@ public class Match {
 
     public Match(Player homePlayer,Player visitorPlayer){
         this.homePlayer = homePlayer;
-        homePlayer.setNumberHomeMatch(homePlayer.getNumberHomeMatch()+1);
         this.visitorPlayer = visitorPlayer;
-        visitorPlayer.setNumberAwayMatch(visitorPlayer.getNumberAwayMatch()+1);
         this.result = "";
         this.homeScore = -1;
         this.visitorScore = -1;
@@ -35,6 +33,7 @@ public class Match {
         System.out.println("*" + this.homePlayer.getName() + " " + this.result + " " + this.visitorPlayer.getName() + "*");
     }
 
+    //Retourne le pari d'un joueur sur ce match
     public Bet findBetFor(Player player){
         for(Bet bet : this.bets){
             if(bet.getPlayer().equals(player)) return bet;
@@ -150,15 +149,11 @@ public class Match {
     //*** MUTATEURS ***
     //Modifie l'équipe à domicile
     public void setHomePlayer(Player homeTeam) {
-        if(this.homePlayer.getPlayerNumber() != 0) this.homePlayer.setNumberHomeMatch(this.homePlayer.getNumberHomeMatch()-1);
         this.homePlayer = homeTeam;
-        this.homePlayer.setNumberHomeMatch(this.homePlayer.getNumberHomeMatch()+1);
     }
     //Modifie l'équipe à l'extérieure
     public void setVisitorPlayer(Player visitorTeam) {
-        if(this.visitorPlayer.getPlayerNumber() != 0) this.visitorPlayer.setNumberAwayMatch(this.visitorPlayer.getNumberAwayMatch()-1);
         this.visitorPlayer = visitorTeam;
-        this.visitorPlayer.setNumberAwayMatch(this.visitorPlayer.getNumberAwayMatch()+1);
     }
     //Modifie le résultat
     public void setResult(String result) {
@@ -182,6 +177,11 @@ public class Match {
             else{
                 this.homePlayer.setNumberDraw(this.homePlayer.getNumberDraw() - 1);
                 this.visitorPlayer.setNumberDraw(this.visitorPlayer.getNumberDraw() - 1);
+            }
+
+            //Enlève les points des paris aux joueurs
+            for(Player player : this.betWinners){
+                player.setBetsPoints(player.getBetsPoints() - this.betPoints);
             }
 
             this.result = "";
@@ -218,8 +218,6 @@ public class Match {
 
             this.alreadyPlayed = true;
 
-            //TODO
-            //Ajout des points pour les paris
             this.betsResult();
         }
     }
@@ -244,7 +242,7 @@ public class Match {
         this.betWinners = betWinners;
     }
     //Modifie le nombre de point gagné au pari
-    public void getBetPoints(float betPoints){
+    public void setBetPoints(float betPoints){
         this.betPoints = betPoints;
     }
 }

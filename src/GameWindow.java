@@ -19,7 +19,7 @@ public class GameWindow extends JFrame {
     private JButton addScoreButton = new JButton("Ajouter Score");
     private JButton deleteScoreButton = new JButton("Supprimer Score");
 
-    private Calendar calendar = new Calendar();
+    //private Calendar calendar = new Calendar();
     private Ranking ranking = new Ranking();
 
     private List<JButton> betsButton = new ArrayList<>();
@@ -29,10 +29,14 @@ public class GameWindow extends JFrame {
     public GameWindow() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("TOURNOI FIFA");
-        //this.setSize(1000, 400);
         this.setSize(1300, 500);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+
+        //Initialisation des données
+        Param.Lottery();
+        Calendar.initCalendar();
+        Calendar.display();
 
         //Définit le nombre de décimal affiché
         this.decimalFormat.setMaximumFractionDigits(2);
@@ -248,7 +252,6 @@ public class GameWindow extends JFrame {
         //initialise le tableau de classement
         updateRankingTable();
 
-        this.calendar.display();
         this.ableBetsButton();
 
         //Fonction déclanché par les boutons de pari
@@ -273,9 +276,9 @@ public class GameWindow extends JFrame {
                         match.findBetFor(player).setScore(score);
 
                         //Rend non cliquable le bouton si tous les pari du joueur sont fait sur cette journée
-                        if(calendar.getCurrentWeek().isBetsDoneFor(player)) button.setEnabled(false);
+                        if(Calendar.getCurrentWeek().isBetsDoneFor(player)) button.setEnabled(false);
 
-                        if(calendar.getCurrentWeek().isAllBetsDone()) {
+                        if(Calendar.getCurrentWeek().isAllBetsDone()) {
                             //Boîte du message d'information
                             JOptionPane jop = new JOptionPane();
                             jop.showMessageDialog(null, "Lancez les matchs!!!", "C'est GOOD", JOptionPane.INFORMATION_MESSAGE);
@@ -288,15 +291,15 @@ public class GameWindow extends JFrame {
         //Fonction déclanché par le addScoreButton
         ActionListener addScoreAction = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Week week = new Week();
-                Match match = new Match();
-                String homeTeam = "home";
-                String visitorTeam = "visitor";
+                Week week;
+                Match match;
+                String homeTeam;
+                String visitorTeam;
 
                 //SI pas de match sélectionner -> on prend le premier match non joué
                 if (calendarTable.getSelectedRow() == -1) {
-                    week = calendar.getCurrentWeek();
-                    match = calendar.getCurrentMatch();
+                    week = Calendar.getCurrentWeek();
+                    match = Calendar.getCurrentMatch();
                     homeTeam = match.getHomePlayer().getName();
                     visitorTeam = match.getVisitorPlayer().getName();
                 }
@@ -304,15 +307,15 @@ public class GameWindow extends JFrame {
                 else {
                     homeTeam = calendarTable.getValueAt(calendarTable.getSelectedRow(), 0).toString();
                     visitorTeam = calendarTable.getValueAt(calendarTable.getSelectedRow(), 2).toString();
-                    match = calendar.getMatchWith(Param.getPlayerByName(homeTeam), Param.getPlayerByName(visitorTeam));
-                    week = calendar.getWeekByMatch(match);
+                    match = Calendar.getMatchWith(Param.getPlayerByName(homeTeam), Param.getPlayerByName(visitorTeam));
+                    week = Calendar.getWeekByMatch(match);
                 }
 
-                if(week.getWeekNumber() > calendar.getCurrentWeek().getWeekNumber()){
+                if(week.getWeekNumber() > Calendar.getCurrentWeek().getWeekNumber()){
                     JOptionPane jop = new JOptionPane();
                     jop.showMessageDialog(null, "Pas la moment pour ce match!", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
-                else if((week.getWeekNumber() == calendar.getCurrentWeek().getWeekNumber()) && (!calendar.getCurrentWeek().isAllBetsDone())){
+                else if((week.getWeekNumber() == Calendar.getCurrentWeek().getWeekNumber()) && (!Calendar.getCurrentWeek().isAllBetsDone())){
                     JOptionPane jop = new JOptionPane();
                     jop.showMessageDialog(null, "Tous les paris n'ont pas été fait!!!", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
@@ -328,13 +331,14 @@ public class GameWindow extends JFrame {
                         ranking.updateRanking();
                         updateRankingTable();
                         //Fin de la journée -> on passe à la suivante
-                        if ((week.isAllMatchPlayed()) && (week.getWeekNumber() != calendar.getWeeks().size())) {
+                        if ((week.isAllMatchPlayed()) && (week.getWeekNumber() != Calendar.weeks.size())) {
                             ableBetsButton();
                             JOptionPane jop = new JOptionPane();
                             jop.showMessageDialog(null, "Journée Terminé -> Les paris sont ouverts", "Journée Fini", JOptionPane.INFORMATION_MESSAGE);
+                            JsonSimple.saveData();
                         }
                         //Fin du tournoi -> Affichage du vainqueur
-                        else if((week.isAllMatchPlayed()) && (week.getWeekNumber() == calendar.getWeeks().size()) ){
+                        else if((week.isAllMatchPlayed()) && (week.getWeekNumber() == Calendar.weeks.size()) ){
                             JOptionPane jop = new JOptionPane();
                             jop.showMessageDialog(null, "Et la victoire pour " + ranking.getGeneralRanking().get(0).getName(), "Journée Fini", JOptionPane.INFORMATION_MESSAGE);
                         }
@@ -349,7 +353,7 @@ public class GameWindow extends JFrame {
                 if(calendarTable.getSelectedRow() != -1){
                     String homeTeam = calendarTable.getValueAt(calendarTable.getSelectedRow(),0).toString();
                     String visitorTeam = calendarTable.getValueAt(calendarTable.getSelectedRow(),2).toString();
-                    Match match = calendar.getMatchWith(Param.getPlayerByName(homeTeam),Param.getPlayerByName(visitorTeam));
+                    Match match = Calendar.getMatchWith(Param.getPlayerByName(homeTeam),Param.getPlayerByName(visitorTeam));
                     addScoreToTable(match,"");
                     match.setResult("");
                     ranking.updateRanking();
@@ -377,7 +381,7 @@ public class GameWindow extends JFrame {
         String homeTeam;
         String visitorTeam;
         int compteur = 0;
-        for (Week week : this.calendar.getWeeks()) {
+        for (Week week : Calendar.weeks) {
             for (Match match : week.getMatchs()) {
                 homeTeam = match.getHomePlayer().getName();
                 visitorTeam = match.getVisitorPlayer().getName();
@@ -565,8 +569,8 @@ public class GameWindow extends JFrame {
     }
 
     public List<Player> getMandatoryWaiters() {
-        int minimum = 1000;
         List<Player> mandatoryWaiters = new ArrayList<>(Param.PLAYERS);
+        /*int minimum = 1000;
 
         for (Player player : mandatoryWaiters) {
             if (player.getNumberWaiting() < minimum) minimum = player.getNumberWaiting();
@@ -576,7 +580,7 @@ public class GameWindow extends JFrame {
             if (player.getNumberWaiting() > minimum) mandatoryWaiters.remove(player);
         }
 
-        if (mandatoryWaiters.size() > Param.PLAYERS.size() - (Param.NB_TV * 2)) mandatoryWaiters = new ArrayList<>();
+        if (mandatoryWaiters.size() > Param.PLAYERS.size() - (Param.NB_TV * 2)) mandatoryWaiters = new ArrayList<>();*/
 
         return mandatoryWaiters;
     }
@@ -625,7 +629,7 @@ public class GameWindow extends JFrame {
     //Trouve la ligne associé à un match dans la table calendrier
     private int findRowByMatch(Match match1){
         int row = 0;
-        for (Week week : this.calendar.getWeeks()){
+        for (Week week : Calendar.weeks){
             for (Match match2 : week.getMatchs()){
                 if(match1 == match2) return row;
                 row++;
@@ -647,7 +651,7 @@ public class GameWindow extends JFrame {
             button.setEnabled(false);
         }
         for(Player player : Param.PLAYERS){
-            if(!this.calendar.getCurrentWeek().isBetsDoneFor(player)) getBetsButtonByName(player.getName()).setEnabled(true);
+            if(!Calendar.getCurrentWeek().isBetsDoneFor(player)) getBetsButtonByName(player.getName()).setEnabled(true);
         }
     }
 
@@ -661,7 +665,8 @@ public class GameWindow extends JFrame {
 
     //Renvoie un match à parier sur cette journée en fonction du joueur en paramètre
     private Match findMatchToBet(Player player){
-        for(Match match : this.calendar.getCurrentWeek().getMatchs()){
+        for(Match match : Calendar.getCurrentWeek().getMatchs()){
+        //for(Match match : this.calendar.getCurrentWeek().getMatchs()){
             for(Bet bet : match.getBets()){
                 if((bet.getPlayer() == player) && (!bet.isDone())) return match;
             }

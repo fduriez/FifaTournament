@@ -2,71 +2,38 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Calendar {
-    private List<Week> weeks = new ArrayList<>();
-
-    public Calendar(){
-        this.Lottery();
-        this.initCalendar();
-    }
-
-    //Associe chaque joueur avec un numéro de joueur
-    private void Lottery() {
-        System.out.println();
-        System.out.println("********** Début lottery **********");
-
-        //Créer une liste de nombre de 1 à NombreDeJoueur
-        List<Integer> numbers = new ArrayList<Integer>();
-        for (int i = 1; i <= Param.PLAYERS.size(); i++) {
-            numbers.add(i);
-        }
-
-        //Attribut un playerNumber à chaque joueur
-        int n = 0;
-        for (Player player : Param.PLAYERS) {
-            // génération d'un entier >= 1 et < Nombre de Joueurs
-            n = (int) (Math.random() * numbers.size());
-            player.setPlayerNumber(numbers.get(n));
-            numbers.remove(n);
-        }
-
-        //Affiche la liste des joueurs
-        for (Player player : Param.PLAYERS) {
-            player.display();
-        }
-        System.out.println();
-        System.out.println("********** Fin lottery **********");
-        System.out.println();
-    }
+public abstract class Calendar {
+    public static List<Week> weeks = new ArrayList<>();
 
     //Initialisation du calendrier en dur
-    private void initCalendar() {
+    public static void initCalendar() {
         List<Pair> pairs = new ArrayList<>();
         switch (Param.PLAYERS.size()) {
             case 4:
-                pairs = this.calendar4Player();
+                pairs = calendar4Player();
                 break;
             case 5:
-                pairs = this.calendar5Player();
+                pairs = calendar5Player();
                 break;
             case 6:
-                if (Param.NB_TV == 2) pairs = this.calendar6Player2TV();
-                if (Param.NB_TV == 3) pairs = this.calendar6Player3TV();
+                if (Param.NB_TV == 2) pairs = calendar6Player2TV();
+                if (Param.NB_TV == 3) pairs = calendar6Player3TV();
                 break;
             case 7:
-                if (Param.NB_TV == 2) pairs = this.calendar7Player2TV();
-                if (Param.NB_TV == 3) pairs = this.calendar7Player3TV();
+                if (Param.NB_TV == 2) pairs = calendar7Player2TV();
+                if (Param.NB_TV == 3) pairs = calendar7Player3TV();
                 break;
             case 8:
-                if (Param.NB_TV == 2) pairs = this.calendar8Player2TV();
-                if (Param.NB_TV == 3) pairs = this.calendar8Player3TV();
-                if (Param.NB_TV == 4) pairs = this.calendar8Player4TV();
+                if (Param.NB_TV == 2) pairs = calendar8Player2TV();
+                if (Param.NB_TV == 3) pairs = calendar8Player3TV();
+                if (Param.NB_TV == 4) pairs = calendar8Player4TV();
                 break;
             case 9:
-                if (Param.NB_TV == 3) pairs = this.calendar9Player3TV();
-                if (Param.NB_TV == 4) pairs = this.calendar9Player4TV();
+                if (Param.NB_TV == 3) pairs = calendar9Player3TV();
+                if (Param.NB_TV == 4) pairs = calendar9Player4TV();
                 break;
         }
+
         int weekNumber = 0;
         Week week = new Week();
         for (Pair pair : pairs) {
@@ -77,17 +44,17 @@ public class Calendar {
                 week.setWeekNumber(weekNumber);
                 week.initWaiters();
                 week.initBettor();
-                this.weeks.add(week);
+                weeks.add(week);
                 week = new Week();
             }
         }
         if(!week.getMatchs().isEmpty()){
-            this.weeks.add(week);
+            weeks.add(week);
         }
     }
 
     //Calendrier pour 4 players
-    private List<Pair> calendar4Player() {
+    private static List<Pair> calendar4Player() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 5 joueurs avec 2 TV
@@ -114,7 +81,7 @@ public class Calendar {
     }
 
     //Calendrier pour 5 players
-    private List<Pair> calendar5Player() {
+    private static List<Pair> calendar5Player() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 5 joueurs avec 2 TV
@@ -153,7 +120,7 @@ public class Calendar {
     }
 
     //Calendrier pour 6 players avec 2 TV
-    private List<Pair> calendar6Player2TV() {
+    private static List<Pair> calendar6Player2TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 6 joueurs avec 2TV
@@ -207,7 +174,7 @@ public class Calendar {
     }
 
     //Calendrier pour 6 players avec 3 TV
-    private List<Pair> calendar6Player3TV() {
+    private static List<Pair> calendar6Player3TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 6 joueurs avec 2TV
@@ -256,7 +223,7 @@ public class Calendar {
     }
 
     //Calendrier pour 7 players avec 2 TV
-    private List<Pair> calendar7Player2TV() {
+    private static List<Pair> calendar7Player2TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 7 joueurs avec 2 TV
@@ -328,7 +295,7 @@ public class Calendar {
     }
 
     //Calendrier pour 7 players avec 3 TV
-    private List<Pair> calendar7Player3TV() {
+    private static List<Pair> calendar7Player3TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 7 joueurs avec 2 TV
@@ -393,7 +360,7 @@ public class Calendar {
     }
 
     //Calendrier pour 8 players avec 2 TV
-    private List<Pair> calendar8Player2TV() {
+    private static List<Pair> calendar8Player2TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 8 joueurs avec 3 TV
@@ -486,7 +453,7 @@ public class Calendar {
     }
 
     //Calendrier pour 8 players avec 3 TV
-    private List<Pair> calendar8Player3TV() {
+    private static List<Pair> calendar8Player3TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 8 joueurs avec 3 TV
@@ -569,7 +536,7 @@ public class Calendar {
     }
 
     //Calendrier pour 8 players avec 4 TV
-    private List<Pair> calendar8Player4TV() {
+    private static List<Pair> calendar8Player4TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 8 joueurs avec 3 TV
@@ -648,7 +615,7 @@ public class Calendar {
     }
 
     //Calendrier pour 9 players avec 3 TV
-    private List<Pair> calendar9Player3TV() {
+    private static List<Pair> calendar9Player3TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 9 joueurs avec 3 TV
@@ -752,7 +719,7 @@ public class Calendar {
     }
 
     //Calendrier pour 9 players avec 4 TV
-    private List<Pair> calendar9Player4TV() {
+    private static List<Pair> calendar9Player4TV() {
         List<Pair> pairs = new ArrayList<Pair>();
 
         //Calendrier pour 8 joueurs avec 3 TV
@@ -851,11 +818,11 @@ public class Calendar {
     }
 
     //Affiche le Calendrier
-    public void display() {
+    public static void display() {
         System.out.println();
         System.out.println("******************** Calendrier ********************");
         System.out.println();
-        for (Week week : this.weeks) {
+        for (Week week : weeks) {
             System.out.println("*** Journée " + week.getWeekNumber() + " ***");
             for (Match match : week.getMatchs()) {
                 System.out.print("*" + match.getHomePlayer().getName() + " - " + match.getVisitorPlayer().getName() + "      Bettors : ");
@@ -864,16 +831,14 @@ public class Calendar {
                 }
                 System.out.println();
             }
+            System.out.print("Waiters : ");
+            for(Player player : week.getWaitingPlayer()){
+                System.out.print(player.getName() + ", ");
+            }
             System.out.println();
             System.out.println();
         }
         System.out.println("******************** Fin Calendrier ********************");
-
-        for (Player player : Param.PLAYERS) {
-            System.out.println("Player : " + player.getPlayerNumber());
-            System.out.println("nombre de matche a domicile : " + player.getNumberHomeMatch());
-            System.out.println("nombre de matche a l'exterieur : " + player.getNumberAwayMatch());
-        }
     }
 
     //Vérifie si un match est dans la journée en cours
@@ -885,16 +850,16 @@ public class Calendar {
     }
 
     //Retourne la journée contenant le match
-    public Week getWeekByMatch(Match match){
-        for(Week week : this.weeks){
+    public static Week getWeekByMatch(Match match){
+        for(Week week : weeks){
             if(week.getMatchs().contains(match)) return week;
         }
         return null;
     }
 
     //Retourne La journée en cours
-    public Week getCurrentWeek(){
-        for(Week week : this.weeks){
+    public static Week getCurrentWeek(){
+        for(Week week : weeks){
             for(Match match : week.getMatchs()){
                 if(!match.isAlreadyPlayed()) return week;
             }
@@ -903,7 +868,7 @@ public class Calendar {
     }
 
     //Retourne le match en cours
-    public Match getCurrentMatch(){
+    public static Match getCurrentMatch(){
         for(Match match : getCurrentWeek().getMatchs()){
             if(!match.isAlreadyPlayed()) return match;
         }
@@ -911,18 +876,10 @@ public class Calendar {
     }
 
     //Retourne le match comportant les 2 équipes
-    public Match getMatchWith(Player homePlayer, Player visitorPlayer){
-        for(Week week : this.weeks){
+    public static Match getMatchWith(Player homePlayer, Player visitorPlayer){
+        for(Week week : weeks){
             if(week.getMatchWith(homePlayer,visitorPlayer) != null) return week.getMatchWith(homePlayer,visitorPlayer);
         }
         return null;
     }
-
-    //*** ACCESSEURS ***
-    //Retourne la liste des journées de championnat
-    public List<Week> getWeeks(){return this.weeks;}
-
-    //*** MUTATEURS ***
-    //Modifie la liste des journées de championnat
-    public void setWeeks(List<Week> weeks){this.weeks = weeks;}
 }

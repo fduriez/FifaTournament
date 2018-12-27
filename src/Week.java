@@ -99,18 +99,7 @@ public class Week {
     public void setWeekNumber(int weekNumber) {this.weekNumber = weekNumber;}
     //Modifie les joueurs qui attendent
     public void setWaitingPlayer(List<Player> waitingPlayer) {
-        //Si non vide -> on enlève une attente aux players de la liste d'attente
-        if(!this.waitingPlayer.isEmpty()){
-            for(Player player : this.waitingPlayer){
-                player.setNumberWaiting(player.getNumberWaiting()-1);
-            }
-        }
-        //Ajout des players en param aux player en attente
         this.waitingPlayer = waitingPlayer;
-        //Ajout d'une attente aux players dans la liste d'attente
-        for(Player player : this.waitingPlayer){
-            player.setNumberWaiting(player.getNumberWaiting()+1);
-        }
     }
     //Modifie les matchs de la journées
     public void setMatchs(List<Match> matchs) {this.matchs = matchs;}

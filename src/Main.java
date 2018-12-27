@@ -58,8 +58,13 @@ public class Main {
 
         Param.initIconTeam();
 
-        initParam(players7,2);
-        GameWindow window = new GameWindow();
+        JsonSimple.loadData();
+
+        Param.playersDisplay();
+        Calendar.display();
+
+        /*initParam(players7,2);
+        GameWindow window = new GameWindow();*/
 
         /*** Test full APP ***/
         //FirstWindow window = new FirstWindow();

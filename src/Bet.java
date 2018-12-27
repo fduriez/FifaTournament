@@ -49,15 +49,22 @@ public class Bet {
     //Modifie le score
     public void setScore(String score){
         this.score = score;
-        if(score != "") this.done = true;
-        else this.done = false;
+        if(!score.isEmpty()) {
+            this.done = true;
 
-        score = score.replaceAll(" ", "");
+            System.out.println("score : " + score);
 
-        //Ajoute score domicile & extérieur
-        String[] buts = score.split("-");
-        this.homeScore = Integer.parseInt(buts[0]);
-        this.visitorScore = Integer.parseInt(buts[1]);
+            //Ajoute score domicile & extérieur
+            score = score.replaceAll(" ", "");
+            String[] buts = score.split("-");
+            this.homeScore = Integer.parseInt(buts[0]);
+            this.visitorScore = Integer.parseInt(buts[1]);
+        }
+        else {
+            this.done = false;
+            this.homeScore = -1;
+            this.visitorScore = -1;
+        }
     }
     //Modifie le score de l'équipe domicile
     public void setHomeScore(int homeScore){

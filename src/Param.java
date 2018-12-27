@@ -14,12 +14,10 @@ public final class Param  {
 
     public static Map<String, ImageIcon> iconTeam = new HashMap<>();
 
-
     public static Font fontTitlePanel = new Font("rockwell", Font.BOLD,18);
     public static Font fontBetsButton = new Font("rockwell", Font.BOLD,15);
     public static Font fontCalendar = new Font("MV Boli", Font.PLAIN,15);
 //MV Boli
-
 
     //Initialise les équipes et leur blason
     public static void initIconTeam(){
@@ -78,5 +76,44 @@ public final class Param  {
         }
         System.out.println();
         System.out.println("********** Fin PLAYERS **********");
+    }
+
+    //Associe chaque joueur avec un numéro de joueur
+    public static void Lottery() {
+        System.out.println();
+        System.out.println("********** Début lottery **********");
+
+        //Créer une liste de nombre de 1 à NombreDeJoueur
+        List<Integer> numbers = new ArrayList<Integer>();
+        for (int i = 1; i <= Param.PLAYERS.size(); i++) {
+            numbers.add(i);
+        }
+
+        //Attribut un playerNumber à chaque joueur
+        int n = 0;
+        for (Player player : Param.PLAYERS) {
+            // génération d'un entier >= 1 et < Nombre de Joueurs
+            n = (int) (Math.random() * numbers.size());
+            player.setPlayerNumber(numbers.get(n));
+            numbers.remove(n);
+        }
+
+        //Affiche la liste des joueurs
+        for (Player player : Param.PLAYERS) {
+            player.display();
+        }
+        System.out.println();
+        System.out.println("********** Fin lottery **********");
+        System.out.println();
+    }
+
+    public static void a(){
+        /*int numberWaiting;
+        int numberHomeMatch;
+        int numberAwayMatch;
+        for (Player player : Param.PLAYERS) {
+            System.out.println("Player : " + player.getPlayerNumber());
+            System.out.println("nombre de matche a domicile : " + player.getNumberHomeMatch());
+            System.out.println("nombre de matche a l'exterieur : " + player.getNumberAwayMatch());*/
     }
 }
