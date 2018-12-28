@@ -19,7 +19,6 @@ public class GameWindow extends JFrame {
     private JButton addScoreButton = new JButton("Ajouter Score");
     private JButton deleteScoreButton = new JButton("Supprimer Score");
 
-    //private Calendar calendar = new Calendar();
     private Ranking ranking = new Ranking();
 
     private List<JButton> betsButton = new ArrayList<>();
@@ -32,11 +31,6 @@ public class GameWindow extends JFrame {
         this.setSize(1300, 500);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-
-        //Initialisation des données
-        Param.Lottery();
-        Calendar.initCalendar();
-        Calendar.display();
 
         //Définit le nombre de décimal affiché
         this.decimalFormat.setMaximumFractionDigits(2);
@@ -112,7 +106,7 @@ public class GameWindow extends JFrame {
 
         //Création du Tableau d'affichage du calendrier
         data = initDataCalendarTable();
-        String[] titleCalendar = {"Equipe Dom","Score","Equipe Ext","Pari Gagnant","Parieur"};
+        String[] titleCalendar = {"Domicile","Score","Exterieur","Pari Gagnant","Parieur"};
         this.calendarTable = new JTable(data, titleCalendar) {
             Border weekBorder = new MatteBorder(2, 0, 0, 0, Color.BLUE);
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
@@ -129,9 +123,9 @@ public class GameWindow extends JFrame {
         this.calendarTable.setFillsViewportHeight(true);
         this.calendarTable.setRowHeight(18);
         this.calendarTable.setFont(Param.fontCalendar);
-        this.calendarTable.getColumn("Equipe Dom").setMaxWidth(100);
+        this.calendarTable.getColumn("Domicile").setMaxWidth(100);
         this.calendarTable.getColumn("Score").setMaxWidth(70);
-        this.calendarTable.getColumn("Equipe Ext").setMaxWidth(100);
+        this.calendarTable.getColumn("Exterieur").setMaxWidth(100);
         this.calendarTable.getColumn("Pari Gagnant").setMaxWidth(100);
         this.calendarTable.getColumn("Parieur").setMaxWidth(100);
         JScrollPane scCalendar = new JScrollPane(this.calendarTable);
@@ -174,7 +168,6 @@ public class GameWindow extends JFrame {
         //Panel du Calendrier et de ses boutons
         JPanel panelCalendar = new JPanel();
         panelCalendar.setBorder(new TitledBorder("test"));
-        //panelCalendar.setMaximumSize(new Dimension(800,500));
         panelCalendar.setPreferredSize(new Dimension(500,400));
         panelCalendar.setLayout(new BoxLayout(panelCalendar, BoxLayout.PAGE_AXIS));
         panelCalendar.add(scCalendar);
@@ -221,7 +214,6 @@ public class GameWindow extends JFrame {
 
         JPanel panelRanking = new JPanel();
         panelRanking.setLayout(new BoxLayout(panelRanking, BoxLayout.PAGE_AXIS));
-        //panelRanking.setPreferredSize(new Dimension(500,400));
         panelRanking.add(panelGeneralRanking);
         panelRanking.add(panelMatchRanking);
 
@@ -231,13 +223,10 @@ public class GameWindow extends JFrame {
 
         TitledBorder titledBorderMainPanel = new TitledBorder("Fenetre");
 
-        TitledBorder titledBorderSpacePanel = new TitledBorder("Escape");
         JPanel panelSpace1 = new JPanel();
         panelSpace1.setPreferredSize(new Dimension(50,50));
-        //panelSpace1.setBorder(titledBorderSpacePanel);
         JPanel panelSpace2 = new JPanel();
         panelSpace2.setPreferredSize(new Dimension(50,50));
-        //panelSpace2.setBorder(titledBorderSpacePanel);
 
         JPanel mainPanel = new JPanel();
         mainPanel.add(panelCalendar);
@@ -249,10 +238,20 @@ public class GameWindow extends JFrame {
         this.getContentPane().add(mainPanel);
         this.setVisible(true);
 
-        //initialise le tableau de classement
+        //initialise les tableaux de calendrier et de classement
+        for(Week week : Calendar.weeks){
+            for(Match match : week.getMatchs()){
+                if(match.isAlreadyPlayed()) addScoreToTable(match,match.getResult());
+            }
+        }
+        ranking.updateRanking();
         updateRankingTable();
 
         this.ableBetsButton();
+
+        /************************/
+        /** Action des Boutons **/
+        /************************/
 
         //Fonction déclanché par les boutons de pari
         for(JButton button : this.betsButton){
@@ -385,12 +384,115 @@ public class GameWindow extends JFrame {
             for (Match match : week.getMatchs()) {
                 homeTeam = match.getHomePlayer().getName();
                 visitorTeam = match.getVisitorPlayer().getName();
+                System.out.println(homeTeam + " - " + visitorTeam);
                 data[compteur] = new Object[]{homeTeam, "", visitorTeam,"",""};
                 compteur++;
             }
         }
         return data;
     }
+
+    //Ajoute le score du match dans la table calendrier
+    public void addScoreToTable(Match match, String score){
+        //Ajout du score du match
+        int row = findRowByMatch(match);
+        this.calendarTable.setValueAt(score,row,1);
+
+        //Ajout des gagnants du pari
+        String betWinners = "";
+        String scoreBetWinner = "";
+        for(Player player : match.getBetWinners()){
+            if(betWinners != "") betWinners += ",";
+            if(scoreBetWinner != "") scoreBetWinner += ",";
+            betWinners += player.getName();
+            scoreBetWinner += match.findBetFor(player).getScore();
+        }
+        this.calendarTable.setValueAt(scoreBetWinner,row,3);
+        this.calendarTable.setValueAt(betWinners,row,4);
+    }
+
+    //MAJ de la table classement
+    public void updateRankingTable(){
+        DefaultTableModel model = (DefaultTableModel) this.generalRankingTable.getModel();
+        int rowCount = model.getRowCount();
+        for(int row=rowCount-1; row>=0; row--){
+            model.removeRow(row);
+        }
+        int row = 0;
+        for(Player player : this.ranking.getGeneralRanking()) {
+            model.addRow(new Object[]{player.getTeam(),player.getName(),this.decimalFormat.format(player.getTotalPoints()),player.getMatchPoints(),this.decimalFormat.format(player.getBetsPoints())});
+        }
+
+        model = (DefaultTableModel) this.matchRankingTable.getModel();
+        rowCount = model.getRowCount();
+        for(row=rowCount-1; row>=0; row--){
+            model.removeRow(row);
+        }
+        for(Player player : this.ranking.getMatchRanking()) {
+            model.addRow(new Object[]{player.getName(),player.getMatchPoints(),player.getNumberMatchPlayed(),player.getNumberVictory(),player.getNumberDraw(),player.getNumberDefeat(),player.getGoalsScored(),player.getGoalsTaken(),player.getGoalDifference()});
+        }
+    }
+
+    //Trouve la ligne associé à un match dans la table calendrier
+    private int findRowByMatch(Match match1){
+        int row = 0;
+        for (Week week : Calendar.weeks){
+            for (Match match2 : week.getMatchs()){
+                if(match1 == match2) return row;
+                row++;
+            }
+        }
+        return row;
+    }
+
+    //Initialise la liste des boutons de pari en fonction des joueurs
+    private void initBetsButton(){
+        for (Player player : Param.PLAYERS){
+            this.betsButton.add(new JButton(player.getName()));
+        }
+    }
+
+    //Rend cliquable ou non les boutons de pari en fonction du joueur et des paris restant sur la journée
+    private void ableBetsButton(){
+        for(JButton button : this.betsButton){
+            button.setEnabled(false);
+        }
+        for(Player player : Param.PLAYERS){
+            if(!Calendar.getCurrentWeek().isBetsDoneFor(player)) getBetsButtonByName(player.getName()).setEnabled(true);
+        }
+    }
+
+    //Renvoie le bouton des paris associé au nom envoyé en paramètre
+    private JButton getBetsButtonByName(String name){
+        for(JButton button : this.betsButton){
+            if(button.getText() == name) return button;
+        }
+        return null;
+    }
+
+    //Renvoie un match à parier sur cette journée en fonction du joueur en paramètre
+    private Match findMatchToBet(Player player){
+        for(Match match : Calendar.getCurrentWeek().getMatchs()){
+        //for(Match match : this.calendar.getCurrentWeek().getMatchs()){
+            for(Bet bet : match.getBets()){
+                if((bet.getPlayer() == player) && (!bet.isDone())) return match;
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /** Test Auto Calendar **/
 
     //Initialisation du Calendrier
     public void initCalendarFromAlgo() {
@@ -583,95 +685,6 @@ public class GameWindow extends JFrame {
         if (mandatoryWaiters.size() > Param.PLAYERS.size() - (Param.NB_TV * 2)) mandatoryWaiters = new ArrayList<>();*/
 
         return mandatoryWaiters;
-    }
-
-    //Ajoute le score du match dans la table calendrier
-    public void addScoreToTable(Match match, String score){
-        //Ajout du score du match
-        int row = findRowByMatch(match);
-        this.calendarTable.setValueAt(score,row,1);
-
-        //Ajout des gagnants du pari
-        String betWinners = "";
-        String scoreBetWinner = "";
-        for(Player player : match.getBetWinners()){
-            if(betWinners != "") betWinners += ",";
-            if(scoreBetWinner != "") scoreBetWinner += ",";
-            betWinners += player.getName();
-            scoreBetWinner += match.findBetFor(player).getScore();
-        }
-        this.calendarTable.setValueAt(scoreBetWinner,row,3);
-        this.calendarTable.setValueAt(betWinners,row,4);
-    }
-
-    //MAJ de la table classement
-    public void updateRankingTable(){
-        DefaultTableModel model = (DefaultTableModel) this.generalRankingTable.getModel();
-        int rowCount = model.getRowCount();
-        for(int row=rowCount-1; row>=0; row--){
-            model.removeRow(row);
-        }
-        int row = 0;
-        for(Player player : this.ranking.getGeneralRanking()) {
-            model.addRow(new Object[]{player.getTeam(),player.getName(),this.decimalFormat.format(player.getTotalPoints()),player.getMatchPoints(),this.decimalFormat.format(player.getBetsPoints())});
-        }
-
-        model = (DefaultTableModel) this.matchRankingTable.getModel();
-        rowCount = model.getRowCount();
-        for(row=rowCount-1; row>=0; row--){
-            model.removeRow(row);
-        }
-        for(Player player : this.ranking.getMatchRanking()) {
-            model.addRow(new Object[]{player.getName(),player.getMatchPoints(),player.getNumberMatchPlayed(),player.getNumberVictory(),player.getNumberDraw(),player.getNumberDefeat(),player.getGoalsScored(),player.getGoalsTaken(),player.getGoalDifference()});
-        }
-    }
-
-    //Trouve la ligne associé à un match dans la table calendrier
-    private int findRowByMatch(Match match1){
-        int row = 0;
-        for (Week week : Calendar.weeks){
-            for (Match match2 : week.getMatchs()){
-                if(match1 == match2) return row;
-                row++;
-            }
-        }
-        return row;
-    }
-
-    //Initialise la liste des boutons de pari en fonction des joueurs
-    private void initBetsButton(){
-        for (Player player : Param.PLAYERS){
-            this.betsButton.add(new JButton(player.getName()));
-        }
-    }
-
-    //Rend cliquable ou non les boutons de pari en fonction du joueur et des paris restant sur la journée
-    private void ableBetsButton(){
-        for(JButton button : this.betsButton){
-            button.setEnabled(false);
-        }
-        for(Player player : Param.PLAYERS){
-            if(!Calendar.getCurrentWeek().isBetsDoneFor(player)) getBetsButtonByName(player.getName()).setEnabled(true);
-        }
-    }
-
-    //Renvoie le bouton des paris associé au nom envoyé en paramètre
-    private JButton getBetsButtonByName(String name){
-        for(JButton button : this.betsButton){
-            if(button.getText() == name) return button;
-        }
-        return null;
-    }
-
-    //Renvoie un match à parier sur cette journée en fonction du joueur en paramètre
-    private Match findMatchToBet(Player player){
-        for(Match match : Calendar.getCurrentWeek().getMatchs()){
-        //for(Match match : this.calendar.getCurrentWeek().getMatchs()){
-            for(Bet bet : match.getBets()){
-                if((bet.getPlayer() == player) && (!bet.isDone())) return match;
-            }
-        }
-        return null;
     }
 }
 

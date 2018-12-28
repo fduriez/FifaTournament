@@ -138,19 +138,6 @@ public class PlayersWindow extends JFrame implements ActionListener{
         p1.add(p11);
         p1.add(p12);
 
-
-
-        //this.teamComboBox.add(new ImageIO().read(this.getClass().getResource("Blason Fifa/PSG.png")));
-
-        /*BufferedImage testPic = null;
-        try {
-            testPic = ImageIO.read(this.getClass().getResource("Blason Fifa/PSG.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //JLabel wIcon = new JLabel(new ImageIcon(wPic));
-        this.visitorLabel.setIcon(new ImageIcon(testPic));*/
-
         this.getContentPane().add(p1);
         this.setVisible(true);
     }
@@ -164,9 +151,13 @@ public class PlayersWindow extends JFrame implements ActionListener{
         System.out.println("nombre de Participant : " + Param.NB_PLAYER);
         System.out.println("nombre de TV : " + Param.NB_TV);
 
+        //Initialisation des données
+        Param.Lottery();
+        Calendar.initCalendar();
+        Calendar.display();
+
         this.dispose();
         GameWindow gameWindow = new GameWindow();
-
     }
 
     //Classe écoutant le bouton "Ajouter"

@@ -1,72 +1,158 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.io.FilenameFilter;
 
-public class FirstWindow extends JFrame implements ActionListener{
+public class FirstWindow extends JFrame{
     private JComboBox nbParticipantCombo = new JComboBox();
     private JComboBox nbTVCombo = new JComboBox();
-    private JButton validButton = new JButton("Valider");
+    private JButton newGameButton = new JButton("Nouvelle Partie");
+    private JComboBox gameSavedCombo = new JComboBox();
+    private JButton loadGameButton = new JButton("Charger Partie");
 
     public FirstWindow(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("NOMBRE DE PARTICIPANTS");
-        this.setSize(500, 100);
+        this.setTitle("INITIALISATION TOURNOI FIFA");
+        this.setSize(600, 250);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
-        //Nous ajoutons notre fenêtre à la liste des auditeurs de notre bouton
-        this.validButton.addActionListener(this);
+        /*********************************/
+        /** Initialisation des ComboBox **/
+        /*********************************/
 
+        //Nombre de participant
         String[] choixNbParticipant = {"4","5","6","7","8","9","10"};
         this.nbParticipantCombo = new JComboBox(choixNbParticipant);
 
+        //Nombre de TV
         String[] choixNbTV = {"1","2","3","4","5"};
         this.nbTVCombo = new JComboBox(choixNbTV);
 
-        GridLayout gridParticipant = new GridLayout(2,1);
-        GridLayout gridTV = new GridLayout(2,1);
-        GridLayout grid = new GridLayout(1,3);
+        //Récupère les sauvegardes
+        File file = new File("saves");
+        String[] directories = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
+        });
+        this.gameSavedCombo = new JComboBox(directories);
 
-        JLabel label1 = new JLabel("Nombre de participant");
-        JPanel panel1 = new JPanel();
-        panel1.setBorder(BorderFactory.createEmptyBorder(0,10,0,20));
-        panel1.setLayout(gridParticipant);
-        panel1.add(label1);
-        panel1.add(this.nbParticipantCombo);
+        /***************************/
+        /** Panel des Sauvegardes **/
+        /***************************/
 
-        JLabel label2 = new JLabel("Nombre de télé");
-        JPanel panel2 = new JPanel();
-        panel2.setBorder(BorderFactory.createEmptyBorder(0,20,0,40));
-        panel2.setLayout(gridTV);
-        panel2.add(label2);
-        panel2.add(this.nbTVCombo);
+        this.gameSavedCombo.setPreferredSize(new Dimension(200,30));
+        this.loadGameButton.setPreferredSize(new Dimension(200,30));
 
-        JPanel panelGlobal = new JPanel();
-        panelGlobal.setLayout(grid);
-        panelGlobal.add(panel1);
-        panelGlobal.add(panel2);
-        panelGlobal.add(this.validButton);
-        panelGlobal.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        JPanel savedComboPanel = new JPanel();
+        savedComboPanel.add(this.gameSavedCombo);
 
-        this.getContentPane().add(panelGlobal);
+        JPanel loadButtonPanel = new JPanel();
+        loadButtonPanel.add(this.loadGameButton);
+
+        JPanel loadPanel = new JPanel();
+        loadPanel.setLayout(new BoxLayout(loadPanel, BoxLayout.PAGE_AXIS));
+        loadPanel.setPreferredSize(new Dimension(250,120));
+        loadPanel.add(savedComboPanel);
+        loadPanel.add(loadButtonPanel);
+        loadPanel.setBorder(new TitledBorder("Charger Partie"));
+
+        /******************************/
+        /** Panel de nouvelle partie **/
+        /******************************/
+
+        JPanel nbPlayerPanel = new JPanel();
+        nbPlayerPanel.add(new JLabel("Nombre de participant"));
+        nbPlayerPanel.add(this.nbParticipantCombo);
+
+        JPanel nbTVPanel = new JPanel();
+        nbTVPanel.add(new JLabel("Nombre de télé"));
+        nbTVPanel.add(this.nbTVCombo);
+
+        JPanel newGameButtonPanel = new JPanel();
+        newGameButtonPanel.setPreferredSize(new Dimension(200,20));
+        newGameButtonPanel.add(this.newGameButton);
+
+        JPanel newGamePanel = new JPanel();
+        newGamePanel.setLayout(new BoxLayout(newGamePanel, BoxLayout.PAGE_AXIS));
+        newGamePanel.setPreferredSize(new Dimension(250,210));
+        newGamePanel.add(nbPlayerPanel);
+        newGamePanel.add(nbTVPanel);
+        newGamePanel.add(newGameButtonPanel);
+        newGamePanel.setBorder(new TitledBorder("Nouvelle Partie"));
+
+        this.nbParticipantCombo.setPreferredSize(new Dimension(200,30));
+        this.nbTVCombo.setPreferredSize(new Dimension(200,30));
+        this.newGameButton.setPreferredSize(new Dimension(200,30));
+
+        /*********************/
+        /** Panel principal **/
+        /*********************/
+
+        JPanel space = new JPanel();
+        space.setPreferredSize(new Dimension(20,10));
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.add(newGamePanel);
+        mainPanel.add(space);
+        mainPanel.add(loadPanel);
+
+        this.getContentPane().add(mainPanel);
         this.setVisible(true);
-    }
 
-    public void actionPerformed(ActionEvent arg0) {
-        Param.NB_PLAYER = Integer.valueOf((String) this.nbParticipantCombo.getSelectedItem());
-        Param.NB_TV = Integer.valueOf((String) this.nbTVCombo.getSelectedItem());
-        Param.NB_MATCH = 0;
-        for(int i=1; i<Param.NB_PLAYER; i++) {
-            Param.NB_MATCH += i;
-        }
-        Param.NB_MATCH *= 2;
+        /************************/
+        /** Action des Boutons **/
+        /************************/
 
-        this.dispose();
-        PlayersWindow playerWindow = new PlayersWindow();
+        //Fonction déclanché par le deleteScoreButton
+        ActionListener newGame = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Param.NB_PLAYER = Integer.valueOf((String) nbParticipantCombo.getSelectedItem());
+                Param.NB_TV = Integer.valueOf((String) nbTVCombo.getSelectedItem());
+                Param.NB_MATCH = 0;
+                for(int i=1; i<Param.NB_PLAYER; i++) {
+                    Param.NB_MATCH += i;
+                }
+                Param.NB_MATCH *= 2;
+
+                dispose();
+                PlayersWindow playerWindow = new PlayersWindow();
+            }
+        };
+
+        //Fonction déclanché par le deleteScoreButton
+        ActionListener loadGame = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String pathSavedGame = (String) gameSavedCombo.getSelectedItem();
+                JsonSimple.loadData(pathSavedGame);
+
+                Param.NB_PLAYER = Param.PLAYERS.size();
+                Param.NB_TV = Calendar.weeks.get(0).getMatchs().size();
+                for(int i=1; i<Param.NB_PLAYER; i++) {
+                    Param.NB_MATCH += i;
+                }
+                Param.NB_MATCH *= 2;
+
+                System.out.println("*** Load Game ***");
+                Param.playersDisplay();
+                System.out.println("Nombre de joueurs : " + Param.NB_PLAYER);
+                System.out.println("Nombre de TV : " + Param.NB_TV);
+                System.out.println("Nombre de Match : " + Param.NB_MATCH);
+
+                dispose();
+                GameWindow gameWindow = new GameWindow();
+            }
+        };
+
+        //liaison entre le bouton Nouvelle Partie et sa fonction
+        this.newGameButton.addActionListener(newGame);
+
+        //liaison entre le bouton Charger Partie et sa fonction
+        this.loadGameButton.addActionListener(loadGame);
     }
 }

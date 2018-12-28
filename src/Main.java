@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FilenameFilter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Main {
@@ -56,18 +60,19 @@ public class Main {
         players9.add(new Player("Jacquou","TsoinTsoin"));
         players9.add(new Player("Michou","PouetPouet"));
 
+        //Création du dossier de sauvegarde
+        File dir = new File("saves");
+        if(!dir.exists()) {
+            dir.mkdir();
+        }
+
         Param.initIconTeam();
-
-        JsonSimple.loadData();
-
-        Param.playersDisplay();
-        Calendar.display();
 
         /*initParam(players7,2);
         GameWindow window = new GameWindow();*/
 
         /*** Test full APP ***/
-        //FirstWindow window = new FirstWindow();
+        FirstWindow window = new FirstWindow();
     }
 
     private static void initParam(List<Player> players,int nbTV){

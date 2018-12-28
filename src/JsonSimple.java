@@ -1,12 +1,15 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
+
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,12 +26,24 @@ public class JsonSimple {
     /***************/
 
     public static void saveData(){
-        savePlayersData();
-        saveCalendarData();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+
+        String[] strDate = dateFormat.format(date).split("/");
+        String dirPath = "saves/" + strDate[0] + strDate[1] +strDate[2];
+        System.out.println(dirPath);
+
+        File dir = new File(dirPath);
+        if(!dir.exists()) {
+            dir.mkdir();
+        }
+
+        savePlayersData(dirPath);
+        saveCalendarData(dirPath);
     }
 
     //Sauvegarde les données des joueurs dans un JSON
-    private static void savePlayersData(){
+    private static void savePlayersData(String dirPath){
         JSONObject fileObject = new JSONObject();
         JSONArray list = new JSONArray();
         for(Player player : Param.PLAYERS){
@@ -37,22 +52,13 @@ public class JsonSimple {
             playerObject.put("Name", player.getName());
             playerObject.put("Team", player.getTeam());
 
-            playerObject.put("BetPoints", player.getBetsPoints());
-
-            playerObject.put("GoalsScored", player.getGoalsScored());
-            playerObject.put("GoalsTaken", player.getGoalsTaken());
-
-            playerObject.put("NumberVictory", player.getNumberVictory());
-            playerObject.put("NumberDraw", player.getNumberDraw());
-            playerObject.put("NumberDefeat", player.getNumberDefeat());
-
             list.add(playerObject);
         }
 
         fileObject.put("Players",list);
 
         //Ajout data to JSON
-        try (FileWriter file = new FileWriter("players.json")) {
+        try (FileWriter file = new FileWriter(dirPath + "/players.json")) {
 
             file.write(fileObject.toJSONString());
             file.flush();
@@ -66,7 +72,7 @@ public class JsonSimple {
     }
 
     //Sauvegarde les données du calendrier dans un JSON
-    private static void saveCalendarData(){
+    private static void saveCalendarData(String dirPath){
         JSONObject fileObject = new JSONObject();
         JSONArray list = new JSONArray();
 
@@ -92,7 +98,7 @@ public class JsonSimple {
         fileObject.put("Weeks",list);
 
         //Ajout data to JSON
-        try (FileWriter file = new FileWriter("calendar.json")) {
+        try (FileWriter file = new FileWriter(dirPath + "/calendar.json")) {
 
             file.write(fileObject.toJSONString());
             file.flush();
@@ -142,30 +148,25 @@ public class JsonSimple {
     /** LOAD DATA **/
     /***************/
 
-    public static void loadData(){
-        loadPlayersData();
-        loadCalendarData();
+    public static void loadData(String pathSavedGame){
+        String pathDir = "saves/" + pathSavedGame;
+        loadPlayersData(pathDir);
+        loadCalendarData(pathDir);
     }
 
     //Récupère les données des joueurs dans le JSON
-    public static void loadPlayersData(){
+    public static void loadPlayersData(String pathDir){
         JSONParser parser = new JSONParser();
         try {
-            Object file = parser.parse(new FileReader("players.json"));
+            Object file = parser.parse(new FileReader(pathDir + "/players.json"));
             JSONObject jsonObject = (JSONObject) file;
-            JSONArray playersListObject = (JSONArray) jsonObject.get("players");
+            JSONArray playersListObject = (JSONArray) jsonObject.get("Players");
 
             for(Object object : playersListObject) {
                 JSONObject playerObject = (JSONObject) object;
                 Player player = new Player(playerObject.get("Name").toString(), playerObject.get("Team").toString());
 
                 player.setPlayerNumber(toIntExact((long) playerObject.get("PlayerNumber")));
-                player.setBetsPoints((float) (double) playerObject.get("BetPoints"));
-                player.setGoalsScored(toIntExact((long) playerObject.get("GoalsScored")));
-                player.setGoalsTaken(toIntExact((long) playerObject.get("GoalsTaken")));
-                player.setNumberVictory(toIntExact((long) playerObject.get("NumberVictory")));
-                player.setNumberDraw(toIntExact((long) playerObject.get("NumberDraw")));
-                player.setNumberDefeat(toIntExact((long) playerObject.get("NumberDefeat")));
 
                 Param.PLAYERS.add(player);
             }
@@ -179,10 +180,10 @@ public class JsonSimple {
     }
 
     //Récupère les données du calendrier dans le JSON
-    public static void loadCalendarData(){
+    public static void loadCalendarData(String pathDir){
         JSONParser parser = new JSONParser();
         try {
-            Object file = parser.parse(new FileReader("calendar.json"));
+            Object file = parser.parse(new FileReader(pathDir + "/calendar.json"));
             JSONObject fileObject = (JSONObject) file;
             JSONArray weeksListObject = (JSONArray) fileObject.get("Weeks");
 
