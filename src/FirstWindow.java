@@ -14,6 +14,11 @@ public class FirstWindow extends JFrame{
     private JButton loadGameButton = new JButton("Charger Partie");
 
     public FirstWindow(){
+
+        /*****************************/
+        /** Paramètre de la fenetre **/
+        /*****************************/
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("INITIALISATION TOURNOI FIFA");
         this.setSize(600, 250);
@@ -109,34 +114,38 @@ public class FirstWindow extends JFrame{
         /** Action des Boutons **/
         /************************/
 
-        //Fonction déclanché par le deleteScoreButton
-        ActionListener newGame = new ActionListener() {
+        this.newGameButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 Param.NB_PLAYER = Integer.valueOf((String) nbParticipantCombo.getSelectedItem());
                 Param.NB_TV = Integer.valueOf((String) nbTVCombo.getSelectedItem());
-                Param.NB_MATCH = 0;
-                for(int i=1; i<Param.NB_PLAYER; i++) {
-                    Param.NB_MATCH += i;
+                Param.NB_MATCH = Param.NB_PLAYER * (Param.NB_PLAYER - 1);
+
+                //Si trop de TV
+                if(Param.NB_TV > Param.NB_PLAYER/2){
+                    JOptionPane jop = new JOptionPane();
+                    jop.showMessageDialog(null, "Trop de TV par rapport aux joueurs!", "AIE", JOptionPane.ERROR_MESSAGE);
                 }
-                Param.NB_MATCH *= 2;
-
-                dispose();
-                PlayersWindow playerWindow = new PlayersWindow();
+                else if(Param.NB_PLAYER/2 < Param.NB_PLAYER-(Param.NB_TV*2)){
+                    JOptionPane jop = new JOptionPane();
+                    jop.showMessageDialog(null, "Pas assez de TV par rapport aux joueurs!", "AIE", JOptionPane.ERROR_MESSAGE);
+                }
+                else{
+                    dispose();
+                    PlayersWindow playerWindow = new PlayersWindow();
+                }
             }
-        };
-
-        //Fonction déclanché par le deleteScoreButton
-        ActionListener loadGame = new ActionListener() {
+        });
+        this.loadGameButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 String pathSavedGame = (String) gameSavedCombo.getSelectedItem();
                 JsonSimple.loadData(pathSavedGame);
 
+                //Initialisation des paramètres
                 Param.NB_PLAYER = Param.PLAYERS.size();
                 Param.NB_TV = Calendar.weeks.get(0).getMatchs().size();
-                for(int i=1; i<Param.NB_PLAYER; i++) {
-                    Param.NB_MATCH += i;
-                }
-                Param.NB_MATCH *= 2;
+                Param.NB_MATCH = Param.NB_PLAYER * (Param.NB_PLAYER - 1);
 
                 System.out.println("*** Load Game ***");
                 Param.playersDisplay();
@@ -147,12 +156,6 @@ public class FirstWindow extends JFrame{
                 dispose();
                 GameWindow gameWindow = new GameWindow();
             }
-        };
-
-        //liaison entre le bouton Nouvelle Partie et sa fonction
-        this.newGameButton.addActionListener(newGame);
-
-        //liaison entre le bouton Charger Partie et sa fonction
-        this.loadGameButton.addActionListener(loadGame);
+        });
     }
 }

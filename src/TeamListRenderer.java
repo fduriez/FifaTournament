@@ -1,12 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class ListRenderer extends DefaultListCellRenderer {
+public class TeamListRenderer extends DefaultListCellRenderer {
     private Color background = new Color(0, 100, 255, 15);
     private Color defaultBackground = (Color) UIManager.get("List.background");
-
-    public ListRenderer() {
-    }
 
     @Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index,

@@ -21,34 +21,34 @@ public final class Param  {
 
     //Initialise les équipes et leur blason
     public static void initIconTeam(){
-        iconTeam.put("AC Milan", new ImageIcon("Blason Fifa/Little/AC Milan.png"));
-        iconTeam.put("Allemagne", new ImageIcon("Blason Fifa/Little/Allemagne.png"));
-        iconTeam.put("Angleterre", new ImageIcon("Blason Fifa/Little/Angleterre.png"));
-        iconTeam.put("Argentine", new ImageIcon("Blason Fifa/Little/Argentine.png"));
-        iconTeam.put("Arsenal", new ImageIcon("Blason Fifa/Little/Arsenal.png"));
-        iconTeam.put("As Roma", new ImageIcon("Blason Fifa/Little/As Roma.png"));
-        iconTeam.put("Atletico Madrid", new ImageIcon("Blason Fifa/Little/Atletico Madrid.png"));
-        iconTeam.put("Barcelone", new ImageIcon("Blason Fifa/Little/Barcelone.png"));
-        iconTeam.put("Bayern Munich", new ImageIcon("Blason Fifa/Little/Bayern Munich.png"));
-        iconTeam.put("Belgique", new ImageIcon("Blason Fifa/Little/Belgique.png"));
-        iconTeam.put("Borussia Dortmund", new ImageIcon("Blason Fifa/Little/Borussia Dortmund.png"));
-        iconTeam.put("Bresil", new ImageIcon("Blason Fifa/Little/Bresil.png"));
-        iconTeam.put("Chelsea", new ImageIcon("Blason Fifa/Little/Chelsea.png"));
-        iconTeam.put("Espagne", new ImageIcon("Blason Fifa/Little/Espagne.png"));
-        iconTeam.put("France", new ImageIcon("Blason Fifa/Little/France.png"));
-        iconTeam.put("Inter Milan", new ImageIcon("Blason Fifa/Little/Inter Milan.png"));
-        iconTeam.put("Italie", new ImageIcon("Blason Fifa/Little/Italie.png"));
-        iconTeam.put("Juventus", new ImageIcon("Blason Fifa/Little/Juventus.png"));
-        iconTeam.put("Liverpool", new ImageIcon("Blason Fifa/Little/Liverpool.png"));
-        iconTeam.put("Lyon", new ImageIcon("Blason Fifa/Little/Lyon.png"));
-        iconTeam.put("Manchester City", new ImageIcon("Blason Fifa/Little/Manchester City.png"));
-        iconTeam.put("Manchester United", new ImageIcon("Blason Fifa/Little/Manchester United.png"));
-        iconTeam.put("Naples", new ImageIcon("Blason Fifa/Little/Naples.png"));
-        iconTeam.put("OM", new ImageIcon("Blason Fifa/Little/OM.png"));
-        iconTeam.put("PSG", new ImageIcon("Blason Fifa/Little/PSG.png"));
-        iconTeam.put("Real Madrid", new ImageIcon("Blason Fifa/Little/Real Madrid.png"));
-        iconTeam.put("Seville", new ImageIcon("Blason Fifa/Little/Seville.png"));
-        iconTeam.put("Tottenham", new ImageIcon("Blason Fifa/Little/Tottenham.png"));
+        iconTeam.put("AC Milan", new ImageIcon("images/Blason Fifa/Little/AC Milan.png"));
+        iconTeam.put("Allemagne", new ImageIcon("images/Blason Fifa/Little/Allemagne.png"));
+        iconTeam.put("Angleterre", new ImageIcon("images/Blason Fifa/Little/Angleterre.png"));
+        iconTeam.put("Argentine", new ImageIcon("images/Blason Fifa/Little/Argentine.png"));
+        iconTeam.put("Arsenal", new ImageIcon("images/Blason Fifa/Little/Arsenal.png"));
+        iconTeam.put("As Roma", new ImageIcon("images/Blason Fifa/Little/As Roma.png"));
+        iconTeam.put("Atletico Madrid", new ImageIcon("images/Blason Fifa/Little/Atletico Madrid.png"));
+        iconTeam.put("Barcelone", new ImageIcon("images/Blason Fifa/Little/Barcelone.png"));
+        iconTeam.put("Bayern Munich", new ImageIcon("images/Blason Fifa/Little/Bayern Munich.png"));
+        iconTeam.put("Belgique", new ImageIcon("images/Blason Fifa/Little/Belgique.png"));
+        iconTeam.put("Borussia Dortmund", new ImageIcon("images/Blason Fifa/Little/Borussia Dortmund.png"));
+        iconTeam.put("Bresil", new ImageIcon("images/Blason Fifa/Little/Bresil.png"));
+        iconTeam.put("Chelsea", new ImageIcon("images/Blason Fifa/Little/Chelsea.png"));
+        iconTeam.put("Espagne", new ImageIcon("images/Blason Fifa/Little/Espagne.png"));
+        iconTeam.put("France", new ImageIcon("images/Blason Fifa/Little/France.png"));
+        iconTeam.put("Inter Milan", new ImageIcon("images/Blason Fifa/Little/Inter Milan.png"));
+        iconTeam.put("Italie", new ImageIcon("images/Blason Fifa/Little/Italie.png"));
+        iconTeam.put("Juventus", new ImageIcon("images/Blason Fifa/Little/Juventus.png"));
+        iconTeam.put("Liverpool", new ImageIcon("images/Blason Fifa/Little/Liverpool.png"));
+        iconTeam.put("Lyon", new ImageIcon("images/Blason Fifa/Little/Lyon.png"));
+        iconTeam.put("Manchester City", new ImageIcon("images/Blason Fifa/Little/Manchester City.png"));
+        iconTeam.put("Manchester United", new ImageIcon("images/Blason Fifa/Little/Manchester United.png"));
+        iconTeam.put("Naples", new ImageIcon("images/Blason Fifa/Little/Naples.png"));
+        iconTeam.put("OM", new ImageIcon("images/Blason Fifa/Little/OM.png"));
+        iconTeam.put("PSG", new ImageIcon("images/Blason Fifa/Little/PSG.png"));
+        iconTeam.put("Real Madrid", new ImageIcon("images/Blason Fifa/Little/Real Madrid.png"));
+        iconTeam.put("Seville", new ImageIcon("images/Blason Fifa/Little/Seville.png"));
+        iconTeam.put("Tottenham", new ImageIcon("images/Blason Fifa/Little/Tottenham.png"));
     }
 
     //Retourne le player lié au number
@@ -107,7 +107,7 @@ public final class Param  {
         System.out.println();
     }
 
-    public static void a(){
+    public static void controlCalendar(){
         /*int numberWaiting;
         int numberHomeMatch;
         int numberAwayMatch;

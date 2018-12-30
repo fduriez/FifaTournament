@@ -8,6 +8,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +20,19 @@ public class GameWindow extends JFrame {
     private JButton addScoreButton = new JButton("Ajouter Score");
     private JButton deleteScoreButton = new JButton("Supprimer Score");
 
-    private Ranking ranking = new Ranking();
-
     private List<JButton> betsButton = new ArrayList<>();
 
     private DecimalFormat decimalFormat = new DecimalFormat();
 
     public GameWindow() {
+
+        /*****************************/
+        /** Paramètre de la fenetre **/
+        /*****************************/
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("TOURNOI FIFA");
-        this.setSize(1300, 500);
+        this.setSize(1300, 580);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
@@ -157,6 +161,7 @@ public class GameWindow extends JFrame {
         this.deleteScoreButton.setPreferredSize(new Dimension(230,40));
         panelButtonCalendar.add(this.addScoreButton);
         panelButtonCalendar.add(this.deleteScoreButton);
+        panelButtonCalendar.setOpaque(false);
 
         /**************************************/
         /** Organisation du panel Calendrier **/
@@ -168,11 +173,12 @@ public class GameWindow extends JFrame {
         //Panel du Calendrier et de ses boutons
         JPanel panelCalendar = new JPanel();
         panelCalendar.setBorder(new TitledBorder("test"));
-        panelCalendar.setPreferredSize(new Dimension(500,400));
+        panelCalendar.setPreferredSize(new Dimension(500,410));
         panelCalendar.setLayout(new BoxLayout(panelCalendar, BoxLayout.PAGE_AXIS));
         panelCalendar.add(scCalendar);
         panelCalendar.add(panelButtonCalendar);
         panelCalendar.setBorder(titledBorderCalendar);
+        panelCalendar.setBackground(new Color(1f,1f,1f,.3f ));
 
         /***********************************************/
         /** Organisation du panel des boutons de pari **/
@@ -192,6 +198,7 @@ public class GameWindow extends JFrame {
             panelBetsButtons.add(button);
         }
         panelBetsButtons.setBorder(titledBorderBetsButton);
+        panelBetsButtons.setBackground(new Color(1f,1f,1f,.3f ));
 
         /*****************************************/
         /** Organisation du panel de classement **/
@@ -206,16 +213,21 @@ public class GameWindow extends JFrame {
         panelGeneralRanking.add(scGeneralRanking);
         panelGeneralRanking.setPreferredSize(new Dimension(450,25*Param.NB_PLAYER + 25));
         panelGeneralRanking.setBorder(titledBorderGeneralRanking);
+        panelGeneralRanking.setBackground(new Color(1f,1f,1f,.3f ));
+        //panelGeneralRanking.setOpaque(false);
 
         JPanel panelMatchRanking = new JPanel();
         panelMatchRanking.add(scMatchRanking);
         panelMatchRanking.setPreferredSize(new Dimension(450,25*Param.NB_PLAYER + 25));
         panelMatchRanking.setBorder(titledBorderMatchRanking);
+        panelMatchRanking.setBackground(new Color(1f,1f,1f,.3f ));
+        //panelMatchRanking.setOpaque(false);
 
         JPanel panelRanking = new JPanel();
         panelRanking.setLayout(new BoxLayout(panelRanking, BoxLayout.PAGE_AXIS));
         panelRanking.add(panelGeneralRanking);
         panelRanking.add(panelMatchRanking);
+        panelRanking.setOpaque(false);
 
         /*************************************/
         /** Organisation du panel principal **/
@@ -225,8 +237,10 @@ public class GameWindow extends JFrame {
 
         JPanel panelSpace1 = new JPanel();
         panelSpace1.setPreferredSize(new Dimension(50,50));
+        panelSpace1.setOpaque(false);
         JPanel panelSpace2 = new JPanel();
         panelSpace2.setPreferredSize(new Dimension(50,50));
+        panelSpace2.setOpaque(false);
 
         JPanel mainPanel = new JPanel();
         mainPanel.add(panelCalendar);
@@ -234,8 +248,36 @@ public class GameWindow extends JFrame {
         mainPanel.add(panelBetsButtons);
         mainPanel.add(panelSpace2);
         mainPanel.add(panelRanking);
-        mainPanel.setBorder(titledBorderMainPanel);
-        this.getContentPane().add(mainPanel);
+        mainPanel.setOpaque(false);
+        //mainPanel.setBorder(titledBorderMainPanel);
+
+        JPanel logoPanel = new JPanel();
+        JLabel image = new JLabel(new ImageIcon(new ImageIcon("images/logoFifa19.png").getImage().getScaledInstance(400, 100, Image.SCALE_DEFAULT)));
+        logoPanel.add(image);
+        //logoPanel.setBackground(new Color(1f,1f,1f,.3f ));
+        logoPanel.setOpaque(false);
+
+        JPanel testPanel = new JPanel() {
+            protected void paintComponent(Graphics g)
+            {
+                super.paintComponent(g);
+
+                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC2.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC3.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC4.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC5.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondFifa19.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                //ImageIcon m = new ImageIcon(new ImageIcon("images/champsElysee.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                //ImageIcon m = new ImageIcon(new ImageIcon("images/championDuMonde.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                Image monImage = m.getImage();
+                g.drawImage(monImage, 0, 0,this);
+            }
+        };
+        testPanel.add(logoPanel);
+        testPanel.add(mainPanel);
+
+        this.getContentPane().add(testPanel);
         this.setVisible(true);
 
         //initialise les tableaux de calendrier et de classement
@@ -244,7 +286,7 @@ public class GameWindow extends JFrame {
                 if(match.isAlreadyPlayed()) addScoreToTable(match,match.getResult());
             }
         }
-        ranking.updateRanking();
+        Ranking.updateRanking();
         updateRankingTable();
 
         this.ableBetsButton();
@@ -253,42 +295,9 @@ public class GameWindow extends JFrame {
         /** Action des Boutons **/
         /************************/
 
-        //Fonction déclanché par les boutons de pari
-        for(JButton button : this.betsButton){
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //Récupération des infos
-                    Player player = Param.getPlayerByName(button.getText());
-                    Match match = findMatchToBet(player);
-                    String homeTeam = match.getHomePlayer().getName();
-                    String visitorTeam = match.getVisitorPlayer().getName();
-
-                    //Fenêtre de pari
-                    BetWindow betWindow = new BetWindow(null,"Pari " + player.getName(),true, homeTeam, visitorTeam);
-
-                    //Si clic sur "Valider" -> récupération du score
-                    if(betWindow.sendData()){
-                        String score = betWindow.getScore();
-
-                        //AjouterScore dans Pari
-                        match.findBetFor(player).setScore(score);
-
-                        //Rend non cliquable le bouton si tous les pari du joueur sont fait sur cette journée
-                        if(Calendar.getCurrentWeek().isBetsDoneFor(player)) button.setEnabled(false);
-
-                        if(Calendar.getCurrentWeek().isAllBetsDone()) {
-                            //Boîte du message d'information
-                            JOptionPane jop = new JOptionPane();
-                            jop.showMessageDialog(null, "Lancez les matchs!!!", "C'est GOOD", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    }
-                }
-            });
-        }
-
-        //Fonction déclanché par le addScoreButton
-        ActionListener addScoreAction = new ActionListener() {
+        //Fonction déclanché par les boutons
+        this.addScoreButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 Week week;
                 Match match;
@@ -327,7 +336,7 @@ public class GameWindow extends JFrame {
                         String score = scoreWindow.getScore();
                         match.setResult(score);
                         addScoreToTable(match, score);
-                        ranking.updateRanking();
+                        Ranking.updateRanking();
                         updateRankingTable();
                         //Fin de la journée -> on passe à la suivante
                         if ((week.isAllMatchPlayed()) && (week.getWeekNumber() != Calendar.weeks.size())) {
@@ -339,15 +348,14 @@ public class GameWindow extends JFrame {
                         //Fin du tournoi -> Affichage du vainqueur
                         else if((week.isAllMatchPlayed()) && (week.getWeekNumber() == Calendar.weeks.size()) ){
                             JOptionPane jop = new JOptionPane();
-                            jop.showMessageDialog(null, "Et la victoire pour " + ranking.getGeneralRanking().get(0).getName(), "Journée Fini", JOptionPane.INFORMATION_MESSAGE);
+                            jop.showMessageDialog(null, "Et la victoire pour " + Ranking.getGeneralRanking().get(0).getName(), "Journée Fini", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
                 }
             }
-        };
-
-        //Fonction déclanché par le deleteScoreButton
-        ActionListener deleteScoreAction = new ActionListener() {
+        });
+        this.deleteScoreButton.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 if(calendarTable.getSelectedRow() != -1){
                     String homeTeam = calendarTable.getValueAt(calendarTable.getSelectedRow(),0).toString();
@@ -355,7 +363,7 @@ public class GameWindow extends JFrame {
                     Match match = Calendar.getMatchWith(Param.getPlayerByName(homeTeam),Param.getPlayerByName(visitorTeam));
                     addScoreToTable(match,"");
                     match.setResult("");
-                    ranking.updateRanking();
+                    Ranking.updateRanking();
                     updateRankingTable();
                 }
                 else {
@@ -365,13 +373,39 @@ public class GameWindow extends JFrame {
                 }
                 calendarTable.clearSelection();
             }
-        };
+        });
+        for(JButton button : this.betsButton) {
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //Récupération des infos
+                    Player player = Param.getPlayerByName(button.getText());
+                    Match match = findMatchToBet(player);
+                    String homeTeam = match.getHomePlayer().getName();
+                    String visitorTeam = match.getVisitorPlayer().getName();
 
-        //liaison entre le bouton addScore et sa fonction
-        this.addScoreButton.addActionListener(addScoreAction);
+                    //Fenêtre de pari
+                    BetWindow betWindow = new BetWindow(null, "Pari " + player.getName(), true, homeTeam, visitorTeam);
 
-        //liaison entre le bouton deleteScore et sa fonction
-        this.deleteScoreButton.addActionListener(deleteScoreAction);
+                    //Si clic sur "Valider" -> récupération du score
+                    if (betWindow.sendData()) {
+                        String score = betWindow.getScore();
+
+                        //AjouterScore dans Pari
+                        match.findBetFor(player).setScore(score);
+
+                        //Rend non cliquable le bouton si tous les pari du joueur sont fait sur cette journée
+                        if (Calendar.getCurrentWeek().isBetsDoneFor(player)) button.setEnabled(false);
+
+                        if (Calendar.getCurrentWeek().isAllBetsDone()) {
+                            //Boîte du message d'information
+                            JOptionPane jop = new JOptionPane();
+                            jop.showMessageDialog(null, "Lancez les matchs!!!", "C'est GOOD", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     //Initialise le tableau de calendrier
@@ -419,7 +453,7 @@ public class GameWindow extends JFrame {
             model.removeRow(row);
         }
         int row = 0;
-        for(Player player : this.ranking.getGeneralRanking()) {
+        for(Player player : Ranking.getGeneralRanking()) {
             model.addRow(new Object[]{player.getTeam(),player.getName(),this.decimalFormat.format(player.getTotalPoints()),player.getMatchPoints(),this.decimalFormat.format(player.getBetsPoints())});
         }
 
@@ -428,7 +462,7 @@ public class GameWindow extends JFrame {
         for(row=rowCount-1; row>=0; row--){
             model.removeRow(row);
         }
-        for(Player player : this.ranking.getMatchRanking()) {
+        for(Player player : Ranking.getMatchRanking()) {
             model.addRow(new Object[]{player.getName(),player.getMatchPoints(),player.getNumberMatchPlayed(),player.getNumberVictory(),player.getNumberDraw(),player.getNumberDefeat(),player.getGoalsScored(),player.getGoalsTaken(),player.getGoalDifference()});
         }
     }
@@ -473,14 +507,13 @@ public class GameWindow extends JFrame {
     //Renvoie un match à parier sur cette journée en fonction du joueur en paramètre
     private Match findMatchToBet(Player player){
         for(Match match : Calendar.getCurrentWeek().getMatchs()){
-        //for(Match match : this.calendar.getCurrentWeek().getMatchs()){
+            //for(Match match : this.calendar.getCurrentWeek().getMatchs()){
             for(Bet bet : match.getBets()){
                 if((bet.getPlayer() == player) && (!bet.isDone())) return match;
             }
         }
         return null;
     }
-
 
 
 
