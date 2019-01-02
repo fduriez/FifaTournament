@@ -45,6 +45,7 @@ public class FirstWindow extends JFrame{
                 return new File(current, name).isDirectory();
             }
         });
+        if(directories.length == 0) directories[0] = "No Save";
         this.gameSavedCombo = new JComboBox(directories);
 
         /***************************/
