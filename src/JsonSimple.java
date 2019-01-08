@@ -1,8 +1,6 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
 import java.io.*;
-
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -10,7 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import static java.lang.Math.toIntExact;
@@ -96,6 +93,7 @@ public class JsonSimple {
         }
 
         fileObject.put("Weeks",list);
+        fileObject.put("Finish",Calendar.isFinish());
 
         //Ajout data to JSON
         try (FileWriter file = new FileWriter(dirPath + "/calendar.json")) {
@@ -208,6 +206,8 @@ public class JsonSimple {
                 week.setWaitingPlayer(waitingPlayers);
 
                 Calendar.weeks.add(week);
+
+                if((boolean) fileObject.get("Finish")) Calendar.setFinish();
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -236,7 +236,6 @@ public class JsonSimple {
         boolean alreadyPlayed = (boolean) matchObject.get("AlreadyPlayed");
         if(alreadyPlayed){
             match.setResult(matchObject.get("Result").toString());
-            match.setBetPoints((float) (double)matchObject.get("BetPoints"));
 
             //Vainqueurs du pari sur le match
             JSONArray betWinnersListObject = (JSONArray) matchObject.get("BetWinners");
@@ -245,6 +244,8 @@ public class JsonSimple {
                 betWinners.add(Param.getPlayerByNumber((int) (long)betWinnerObject));
             }
             match.setBetWinners(betWinners);
+
+            if(!betWinners.isEmpty()) match.setBetPoints((float) (double)matchObject.get("BetPoints"));
         }
 
         return match;

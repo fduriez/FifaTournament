@@ -92,12 +92,15 @@ public class Match {
             }
         }
 
-        this.betPoints /= (float)this.betWinners.size();
+        if(!this.betWinners.isEmpty()){
+            this.betPoints /= (float)this.betWinners.size();
 
-        //Ajout des points aux qagnants
-        for(Player player : this.betWinners){
-            player.setBetsPoints(player.getBetsPoints() + this.betPoints);
+            //Ajout des points aux qagnants
+            for(Player player : this.betWinners){
+                player.setBetsPoints(player.getBetsPoints() + this.betPoints);
+            }
         }
+        else this.betPoints = 0;
     }
 
     private boolean isSameWinner(Bet bet){

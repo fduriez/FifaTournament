@@ -4,6 +4,7 @@ import java.util.List;
 
 public abstract class Calendar {
     public static List<Week> weeks = new ArrayList<>();
+    private static boolean finish = false;
 
     //Initialisation du calendrier en dur
     public static void initCalendar() {
@@ -881,5 +882,15 @@ public abstract class Calendar {
             if(week.getMatchWith(homePlayer,visitorPlayer) != null) return week.getMatchWith(homePlayer,visitorPlayer);
         }
         return null;
+    }
+
+    //Retourne si le tournoi est terminé ou non
+    public static boolean isFinish(){
+        return finish;
+    }
+
+    //Défini que le tournoi est terminé
+    public static void setFinish() {
+        finish = true;
     }
 }

@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -8,7 +7,6 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +30,9 @@ public class GameWindow extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("TOURNOI FIFA");
-        this.setSize(1300, 580);
+        this.setExtendedState(this.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
 
         //Définit le nombre de décimal affiché
         this.decimalFormat.setMaximumFractionDigits(2);
@@ -52,16 +50,17 @@ public class GameWindow extends JFrame {
             }
         };
         this.generalRankingTable.setFillsViewportHeight(true);
-        this.generalRankingTable.setRowHeight(20);
-        this.generalRankingTable.getColumn("").setMaxWidth(40);
-        this.generalRankingTable.getColumn("Joueur").setMaxWidth(90);
-        this.generalRankingTable.getColumn("P Total").setMaxWidth(60);
-        this.generalRankingTable.getColumn("P Match").setMaxWidth(60);
-        this.generalRankingTable.getColumn("P Pari").setMaxWidth(60);
+        this.generalRankingTable.setRowHeight(25);
+        this.generalRankingTable.setFont(Param.fontRanking);
+        this.generalRankingTable.getTableHeader().setPreferredSize(new Dimension(0,25));
+        this.generalRankingTable.getTableHeader().setFont(Param.fontTitleRanking);
+        this.generalRankingTable.getColumn("").setMaxWidth(50);
+        this.generalRankingTable.getColumn("Joueur").setMaxWidth(110);
+        this.generalRankingTable.getColumn("P Total").setMaxWidth(80);
+        this.generalRankingTable.getColumn("P Match").setMaxWidth(80);
+        this.generalRankingTable.getColumn("P Pari").setMaxWidth(80);
         JScrollPane scGeneralRanking = new JScrollPane(this.generalRankingTable);
-        scGeneralRanking.setPreferredSize(new Dimension(310,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
-        scGeneralRanking.setMaximumSize(new Dimension(310,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
-        scGeneralRanking.setMinimumSize(new Dimension(310,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+23));
+        scGeneralRanking.setPreferredSize(new Dimension(400,Param.NB_PLAYER*this.generalRankingTable.getRowHeight()+28));
 
         //Empêche la modification de la taille du calendrier et la sélection des cellules
         this.generalRankingTable.setCellSelectionEnabled(false);
@@ -83,20 +82,21 @@ public class GameWindow extends JFrame {
             }
         };
         this.matchRankingTable.setFillsViewportHeight(true);
-        this.matchRankingTable.setRowHeight(20);
-        this.matchRankingTable.getColumn("Joueur").setMaxWidth(90);
-        this.matchRankingTable.getColumn("Points").setMaxWidth(50);
-        this.matchRankingTable.getColumn("J").setMaxWidth(40);
-        this.matchRankingTable.getColumn("G").setMaxWidth(40);
-        this.matchRankingTable.getColumn("N").setMaxWidth(40);
-        this.matchRankingTable.getColumn("P").setMaxWidth(40);
-        this.matchRankingTable.getColumn("Bp").setMaxWidth(40);
-        this.matchRankingTable.getColumn("Bc").setMaxWidth(40);
-        this.matchRankingTable.getColumn("Diff").setMaxWidth(40);
+        this.matchRankingTable.setRowHeight(25);
+        this.matchRankingTable.setFont(Param.fontRanking);
+        this.matchRankingTable.getTableHeader().setPreferredSize(new Dimension(0,25));
+        this.matchRankingTable.getTableHeader().setFont(Param.fontTitleRanking);
+        this.matchRankingTable.getColumn("Joueur").setMaxWidth(100);
+        this.matchRankingTable.getColumn("Points").setMaxWidth(70);
+        this.matchRankingTable.getColumn("J").setMaxWidth(50);
+        this.matchRankingTable.getColumn("G").setMaxWidth(50);
+        this.matchRankingTable.getColumn("N").setMaxWidth(50);
+        this.matchRankingTable.getColumn("P").setMaxWidth(50);
+        this.matchRankingTable.getColumn("Bp").setMaxWidth(50);
+        this.matchRankingTable.getColumn("Bc").setMaxWidth(50);
+        this.matchRankingTable.getColumn("Diff").setMaxWidth(50);
         JScrollPane scMatchRanking = new JScrollPane(this.matchRankingTable);
-        scMatchRanking.setPreferredSize(new Dimension(420,Param.NB_PLAYER*this.matchRankingTable.getRowHeight()+23));
-        scMatchRanking.setMaximumSize(new Dimension(420,Param.NB_PLAYER*this.matchRankingTable.getRowHeight()+23));
-        scMatchRanking.setMinimumSize(new Dimension(420,Param.NB_PLAYER*this.matchRankingTable.getRowHeight()+23));
+        scMatchRanking.setPreferredSize(new Dimension(520,Param.NB_PLAYER*this.matchRankingTable.getRowHeight()+28));
 
         //Empêche la modification de la taille du calendrier et la sélection des cellules
         this.matchRankingTable.setCellSelectionEnabled(false);
@@ -110,32 +110,34 @@ public class GameWindow extends JFrame {
 
         //Création du Tableau d'affichage du calendrier
         data = initDataCalendarTable();
-        String[] titleCalendar = {"Domicile","Score","Exterieur","Pari Gagnant","Parieur"};
+        String[] titleCalendar = {"Domicile","Score","Exterieur","Paris"};
         this.calendarTable = new JTable(data, titleCalendar) {
-            Border weekBorder = new MatteBorder(2, 0, 0, 0, Color.BLUE);
             public Component prepareRenderer(TableCellRenderer renderer, int row, int column)
             {
                 Component c = super.prepareRenderer(renderer, row, column);
                 JComponent jc = (JComponent)c;
-                jc.setBorder(row % Param.NB_TV == 0 ? weekBorder : null);
+                jc.setBorder(row % Param.NB_TV == 0 ? new MatteBorder(4, 0, 0, 0, Color.BLUE) : null);
                 return c;
             }
             public boolean isCellEditable(int row, int col) {
                 return false;
             }
         };
+        this.calendarTable.getColumnModel().getColumn(3).setCellRenderer(new JPanelTableCellRenderer());
         this.calendarTable.setFillsViewportHeight(true);
-        this.calendarTable.setRowHeight(18);
+        this.calendarTable.setRowHeight(40);
+        this.calendarTable.getTableHeader().setPreferredSize(new Dimension(0,50));
+        this.calendarTable.getTableHeader().setFont(Param.fontTitleCalendar);
         this.calendarTable.setFont(Param.fontCalendar);
-        this.calendarTable.getColumn("Domicile").setMaxWidth(100);
-        this.calendarTable.getColumn("Score").setMaxWidth(70);
-        this.calendarTable.getColumn("Exterieur").setMaxWidth(100);
-        this.calendarTable.getColumn("Pari Gagnant").setMaxWidth(100);
-        this.calendarTable.getColumn("Parieur").setMaxWidth(100);
+        this.calendarTable.getColumn("Domicile").setMaxWidth(130);
+        this.calendarTable.getColumn("Score").setMaxWidth(90);
+        this.calendarTable.getColumn("Exterieur").setMaxWidth(130);
+        this.calendarTable.getColumn("Paris").setMaxWidth(600);
         JScrollPane scCalendar = new JScrollPane(this.calendarTable);
-        scCalendar.setPreferredSize(new Dimension(470,325));
-        scCalendar.setMaximumSize(new Dimension(470,325));
-        scCalendar.setMinimumSize(new Dimension(470,325));
+        scCalendar.setMaximumSize(new Dimension(950,600));
+        scCalendar.setMinimumSize(new Dimension(950,600));
+        scCalendar.setSize(new Dimension(950,600));
+        scCalendar.setPreferredSize(new Dimension(950,600));
 
         //Empêche la modification de la taille du calendrier
         this.calendarTable.getTableHeader().setReorderingAllowed(false);
@@ -155,10 +157,10 @@ public class GameWindow extends JFrame {
 
         //Panel pour les boutons d'ajout et de suppression de score
         JPanel panelButtonCalendar = new JPanel();
-        this.addScoreButton.setMinimumSize(new Dimension(230,40));
-        this.addScoreButton.setPreferredSize(new Dimension(230,40));
-        this.deleteScoreButton.setMinimumSize(new Dimension(230,40));
-        this.deleteScoreButton.setPreferredSize(new Dimension(230,40));
+        this.addScoreButton.setPreferredSize(new Dimension(475,60));
+        this.deleteScoreButton.setPreferredSize(new Dimension(475,60));
+        this.addScoreButton.setFont(Param.fontButtonCalendar);
+        this.deleteScoreButton.setFont(Param.fontButtonCalendar);
         panelButtonCalendar.add(this.addScoreButton);
         panelButtonCalendar.add(this.deleteScoreButton);
         panelButtonCalendar.setOpaque(false);
@@ -173,7 +175,7 @@ public class GameWindow extends JFrame {
         //Panel du Calendrier et de ses boutons
         JPanel panelCalendar = new JPanel();
         panelCalendar.setBorder(new TitledBorder("test"));
-        panelCalendar.setPreferredSize(new Dimension(500,410));
+        panelCalendar.setPreferredSize(new Dimension(1000,720));
         panelCalendar.setLayout(new BoxLayout(panelCalendar, BoxLayout.PAGE_AXIS));
         panelCalendar.add(scCalendar);
         panelCalendar.add(panelButtonCalendar);
@@ -190,10 +192,10 @@ public class GameWindow extends JFrame {
         this.initBetsButton();
         JPanel panelBetsButtons = new JPanel();
         panelBetsButtons.setLayout(new BoxLayout(panelBetsButtons, BoxLayout.PAGE_AXIS));
-        panelBetsButtons.setPreferredSize(new Dimension(150,50*Param.NB_PLAYER));
+        panelBetsButtons.setPreferredSize(new Dimension(200,70*Param.NB_PLAYER));
         for (JButton button : this.betsButton){
-            button.setMaximumSize(new Dimension(150,50));
-            button.setMinimumSize(new Dimension(150,50));
+            button.setMaximumSize(new Dimension(200,70));
+            button.setMinimumSize(new Dimension(200,70));
             button.setFont(Param.fontBetsButton);
             panelBetsButtons.add(button);
         }
@@ -211,14 +213,14 @@ public class GameWindow extends JFrame {
 
         JPanel panelGeneralRanking = new JPanel();
         panelGeneralRanking.add(scGeneralRanking);
-        panelGeneralRanking.setPreferredSize(new Dimension(450,25*Param.NB_PLAYER + 25));
+        panelGeneralRanking.setPreferredSize(new Dimension(550,33*Param.NB_PLAYER + 25));
         panelGeneralRanking.setBorder(titledBorderGeneralRanking);
         panelGeneralRanking.setBackground(new Color(1f,1f,1f,.3f ));
         //panelGeneralRanking.setOpaque(false);
 
         JPanel panelMatchRanking = new JPanel();
         panelMatchRanking.add(scMatchRanking);
-        panelMatchRanking.setPreferredSize(new Dimension(450,25*Param.NB_PLAYER + 25));
+        panelMatchRanking.setPreferredSize(new Dimension(550,33*Param.NB_PLAYER + 25));
         panelMatchRanking.setBorder(titledBorderMatchRanking);
         panelMatchRanking.setBackground(new Color(1f,1f,1f,.3f ));
         //panelMatchRanking.setOpaque(false);
@@ -232,8 +234,6 @@ public class GameWindow extends JFrame {
         /*************************************/
         /** Organisation du panel principal **/
         /*************************************/
-
-        TitledBorder titledBorderMainPanel = new TitledBorder("Fenetre");
 
         JPanel panelSpace1 = new JPanel();
         panelSpace1.setPreferredSize(new Dimension(50,50));
@@ -249,12 +249,10 @@ public class GameWindow extends JFrame {
         mainPanel.add(panelSpace2);
         mainPanel.add(panelRanking);
         mainPanel.setOpaque(false);
-        //mainPanel.setBorder(titledBorderMainPanel);
 
         JPanel logoPanel = new JPanel();
-        JLabel image = new JLabel(new ImageIcon(new ImageIcon("images/logoFifa19.png").getImage().getScaledInstance(400, 100, Image.SCALE_DEFAULT)));
+        JLabel image = new JLabel(new ImageIcon(new ImageIcon("images/logoFifa19.png").getImage().getScaledInstance(800, 200, Image.SCALE_DEFAULT)));
         logoPanel.add(image);
-        //logoPanel.setBackground(new Color(1f,1f,1f,.3f ));
         logoPanel.setOpaque(false);
 
         JPanel testPanel = new JPanel() {
@@ -262,14 +260,7 @@ public class GameWindow extends JFrame {
             {
                 super.paintComponent(g);
 
-                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
-                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC2.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
-                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC3.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
-                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC4.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
-                ImageIcon m = new ImageIcon(new ImageIcon("images/fondLDC5.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
-                //ImageIcon m = new ImageIcon(new ImageIcon("images/fondFifa19.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
-                //ImageIcon m = new ImageIcon(new ImageIcon("images/champsElysee.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
-                //ImageIcon m = new ImageIcon(new ImageIcon("images/championDuMonde.jpg").getImage().getScaledInstance(1300, 580, Image.SCALE_DEFAULT));
+                ImageIcon m = new ImageIcon(new ImageIcon(Param.fondPath + "fondLDC5.jpg").getImage().getScaledInstance(this.getWidth(),this.getHeight(), Image.SCALE_DEFAULT));
                 Image monImage = m.getImage();
                 g.drawImage(monImage, 0, 0,this);
             }
@@ -283,7 +274,9 @@ public class GameWindow extends JFrame {
         //initialise les tableaux de calendrier et de classement
         for(Week week : Calendar.weeks){
             for(Match match : week.getMatchs()){
-                if(match.isAlreadyPlayed()) addScoreToTable(match,match.getResult());
+                if(match.isAlreadyPlayed()) {
+                    addScoreToTable(match,match.getResult());
+                }
             }
         }
         Ranking.updateRanking();
@@ -347,8 +340,10 @@ public class GameWindow extends JFrame {
                         }
                         //Fin du tournoi -> Affichage du vainqueur
                         else if((week.isAllMatchPlayed()) && (week.getWeekNumber() == Calendar.weeks.size()) ){
+                            JsonSimple.saveData();
                             JOptionPane jop = new JOptionPane();
                             jop.showMessageDialog(null, "Et la victoire pour " + Ranking.getGeneralRanking().get(0).getName(), "Journée Fini", JOptionPane.INFORMATION_MESSAGE);
+                            Calendar.setFinish();
                         }
                     }
                 }
@@ -418,8 +413,12 @@ public class GameWindow extends JFrame {
             for (Match match : week.getMatchs()) {
                 homeTeam = match.getHomePlayer().getName();
                 visitorTeam = match.getVisitorPlayer().getName();
-                System.out.println(homeTeam + " - " + visitorTeam);
-                data[compteur] = new Object[]{homeTeam, "", visitorTeam,"",""};
+                List<String> bettors = new ArrayList<>();
+                for(Bet bet : match.getBets()) {
+                    bettors.add(bet.getPlayer().getName());
+                }
+                System.out.println();
+                data[compteur] = new Object[]{homeTeam, "", visitorTeam,"","",""};
                 compteur++;
             }
         }
@@ -432,17 +431,8 @@ public class GameWindow extends JFrame {
         int row = findRowByMatch(match);
         this.calendarTable.setValueAt(score,row,1);
 
-        //Ajout des gagnants du pari
-        String betWinners = "";
-        String scoreBetWinner = "";
-        for(Player player : match.getBetWinners()){
-            if(betWinners != "") betWinners += ",";
-            if(scoreBetWinner != "") scoreBetWinner += ",";
-            betWinners += player.getName();
-            scoreBetWinner += match.findBetFor(player).getScore();
-        }
-        this.calendarTable.setValueAt(scoreBetWinner,row,3);
-        this.calendarTable.setValueAt(betWinners,row,4);
+        //Ajout des paris
+        this.addBetsToTable(match);
     }
 
     //MAJ de la table classement
@@ -492,7 +482,7 @@ public class GameWindow extends JFrame {
             button.setEnabled(false);
         }
         for(Player player : Param.PLAYERS){
-            if(!Calendar.getCurrentWeek().isBetsDoneFor(player)) getBetsButtonByName(player.getName()).setEnabled(true);
+            if((!Calendar.isFinish()) && !(Calendar.getCurrentWeek().isBetsDoneFor(player))) getBetsButtonByName(player.getName()).setEnabled(true);
         }
     }
 
@@ -515,6 +505,26 @@ public class GameWindow extends JFrame {
         return null;
     }
 
+    //Affiche les paris dans le calendrier
+    private void addBetsToTable(Match match) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout());
+        panel.setOpaque(false);
+
+        for (Bet bet : match.getBets()) {
+            JLabel label = new JLabel(bet.getPlayer().getName() + " : " + bet.getScore());
+            if(match.getBetWinners().contains(bet.getPlayer())){
+                label.setOpaque(true);
+                label.setBackground(Param.backgroundVictoryBet);
+            }
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setFont(Param.fontPariCalendar);
+            label.setBorder(new MatteBorder(0,1,0,1,Color.BLACK));
+            panel.add(label);
+        }
+
+        this.calendarTable.setValueAt(panel, findRowByMatch(match), 3);
+    }
 
 
 
