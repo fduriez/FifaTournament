@@ -14,17 +14,21 @@ public final class Param  {
 
     public static Map<String, ImageIcon> iconTeam = new HashMap<>();
 
+    //Font
     public static Font fontTitlePanel = new Font("rockwell", Font.BOLD,25);
     public static Font fontBetsButton = new Font("rockwell", Font.BOLD,20);
     public static Font fontTitleCalendar = new Font("MV Boli", Font.BOLD,23);
     public static Font fontCalendar = new Font("MV Boli", Font.PLAIN,20);
     public static Font fontPariCalendar = new Font("MV Boli", Font.PLAIN,16);
     public static Font fontButtonCalendar = new Font("rockwell", Font.BOLD,23);
-    public static Font fontRanking = new Font("MV Boli", Font.PLAIN,16);
-    public static Font fontTitleRanking = new Font("MV Boli", Font.PLAIN,18);
+    public static Font fontRanking = new Font("MV Boli", Font.PLAIN,20);
+    public static Font fontTitleRanking = new Font("MV Boli", Font.BOLD,23);
+    //public static Font fontDisableItem = new Font("MV Boli", Font.PLAIN,23);
 
     public static final String littleBlasonPath = "images/Blason/Little/";
+    public static final String greatBlasonPath = "images/Blason/Great/";
     public static final String fondPath = "images/Fond/";
+    public static List<ImageIcon> fondList = new ArrayList<>();
 
     public static Color backgroundVictoryBet = new Color(0,180,0);
 
@@ -58,6 +62,18 @@ public final class Param  {
         iconTeam.put("Real Madrid", new ImageIcon(littleBlasonPath + "Real Madrid.png"));
         iconTeam.put("Seville", new ImageIcon(littleBlasonPath + "Seville.png"));
         iconTeam.put("Tottenham", new ImageIcon(littleBlasonPath + "Tottenham.png"));
+    }
+
+    //Initialise les images de fond
+    public static void initFondList(){
+        fondList.add(new ImageIcon(Param.fondPath + "championDuMonde.jpg"));
+        fondList.add(new ImageIcon(Param.fondPath + "champsElysee.jpg"));
+        fondList.add(new ImageIcon(Param.fondPath + "FIFA19.jpg"));
+        fondList.add(new ImageIcon(Param.fondPath + "fondLDC.jpg"));
+        fondList.add(new ImageIcon(Param.fondPath + "fondLDC2.jpg"));
+        fondList.add(new ImageIcon(Param.fondPath + "fondLDC3.jpg"));
+        fondList.add(new ImageIcon(Param.fondPath + "fondLDC4.jpg"));
+        fondList.add(new ImageIcon(Param.fondPath + "fondLDC5.jpg"));
     }
 
     //Retourne le player lié au number

@@ -13,8 +13,15 @@ public class TeamListRenderer extends DefaultListCellRenderer {
         String name = (String) value;
         this.setText(name);
 
-        ImageIcon icon = new ImageIcon(Param.iconTeam.get(name).getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-        this.setIcon(icon);
+        if(Param.iconTeam.get(name) != null){
+            ImageIcon icon = new ImageIcon(Param.iconTeam.get(name).getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+            this.setIcon(icon);
+        }
+        else {
+            //this.setFont();
+            this.setForeground(Color.GRAY);
+        }
+
 
         if (!isSelected) {
             this.setBackground(index % 2 == 0 ? background : defaultBackground);

@@ -11,6 +11,7 @@ public class Main {
         }
 
         Param.initIconTeam();
+        Param.initFondList();
 
         /*** Test full APP ***/
         FirstWindow window = new FirstWindow();

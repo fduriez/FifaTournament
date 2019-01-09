@@ -11,7 +11,7 @@ class TableRenderer extends DefaultTableCellRenderer {
                                                    boolean hasFocus, int row, int column) {
 
         String name = (String) value;
-        icon = new ImageIcon(Param.iconTeam.get(name).getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        icon = new ImageIcon(Param.iconTeam.get(name).getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT));
 
         lbl.setHorizontalAlignment(CENTER);
         lbl.setIcon(icon);

@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class PlayersWindow extends JFrame {
     private JTextField nameTextField = new JTextField();
@@ -50,7 +51,9 @@ public class PlayersWindow extends JFrame {
         /***********************/
 
         List<String> teamNames = new ArrayList<String>();
-        //teamNames.add("Premier League");
+        teamNames.add("# TEAM #");
+
+        teamNames.add("#Premier League");
         teamNames.add("Arsenal");
         teamNames.add("Chelsea");
         teamNames.add("Liverpool");
@@ -58,29 +61,29 @@ public class PlayersWindow extends JFrame {
         teamNames.add("Manchester United");
         teamNames.add("Tottenham");
 
-        //teamNames.add("Ligue 1");
+        teamNames.add("#Ligue 1");
         teamNames.add("Lyon");
         teamNames.add("OM");
         teamNames.add("PSG");
 
-        //teamNames.add("Liga");
+        teamNames.add("#Liga");
         teamNames.add("Atletico Madrid");
         teamNames.add("Barcelone");
         teamNames.add("Real Madrid");
         teamNames.add("Seville");
 
-        //teamNames.add("Bundesliga");
+        teamNames.add("#Bundesliga");
         teamNames.add("Bayern Munich");
         teamNames.add("Borussia Dortmund");
 
-        //teamNames.add("Serie A");
+        teamNames.add("#Serie A");
         teamNames.add("AC Milan");
         teamNames.add("As Roma");
         teamNames.add("Inter Milan");
         teamNames.add("Juventus");
         teamNames.add("Naples");
 
-        //teamNames.add("Equipe Nationale");
+        teamNames.add("#Equipe Nationale");
         teamNames.add("Allemagne");
         teamNames.add("Angleterre");
         teamNames.add("Argentine");
@@ -91,8 +94,27 @@ public class PlayersWindow extends JFrame {
         teamNames.add("Italie");
 
         //Ajout des équipes dans la ComboBox
-        this.teamComboBox = new JComboBox(teamNames.toArray(new String[teamNames.size()]));
+        this.teamComboBox.setModel(new DefaultComboBoxModel<String>() {
+            private static final long serialVersionUID = 1L;
+            boolean selectionAllowed = true;
+
+            @Override
+            public void setSelectedItem(Object anObject) {
+                String value = (String) anObject;
+                if (!value.startsWith("#")) {
+                    super.setSelectedItem(anObject);
+                } else if (selectionAllowed) {
+                    // Allow this just once
+                    selectionAllowed = false;
+                    super.setSelectedItem(anObject);
+                }
+            }
+        });
+        for(String value : teamNames){
+            this.teamComboBox.addItem(value);
+        }
         this.teamComboBox.setRenderer(new TeamListRenderer());
+
 
         /************************************/
         /** Gestion des polices d'écriture **/
